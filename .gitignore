@@ -3,3 +3,4 @@
 /.gradle/
 /build/libs/
 /build/generated/
+/gradle/
