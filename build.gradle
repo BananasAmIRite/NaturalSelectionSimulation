@@ -1,0 +1,31 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+}
+
+apply plugin: 'application'
+
+
+group 'org.BananasAmIRite'
+version '1.0'
+
+application {
+    mainClassName = "org.BananasAmIRite.NaturalSelectionSimulation.Main"
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile group: 'org.yaml', name: 'snakeyaml', version: '1.27'
+}
+
+jar {
+    manifest {
+        attributes(
+                "Main-Class": "org.BananasAmIRite.NaturalSelectionSimulation.Main"
+        )
+    }
+}
