@@ -3,12 +3,13 @@ package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.TraitsAPI.Traits;
 
-public class Creature extends Entity {
+public class Creature extends Thread implements Entity {
     private final int id;
     private final Simulation simulation;
     private Coordinate home;
     private Coordinate location;
     private Traits traits;
+    private boolean isRunning = true;
 
     public Creature(Simulation sim, int id) throws IllegalAccessException, InstantiationException {
         this.id = id;
@@ -28,7 +29,7 @@ public class Creature extends Entity {
         this.home = home;
     }
 
-    public int getId() {
+    public int getCreatureID() {
         return id;
     }
 
@@ -56,5 +57,20 @@ public class Creature extends Entity {
                 ", location=" + location +
                 ", traits=" + traits +
                 '}';
+    }
+
+    public void run() {
+        while (true) {
+            if (!isRunning) continue;
+            break;
+        }
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void setRunning(boolean running) {
+        isRunning = running;
     }
 }
