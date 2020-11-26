@@ -62,8 +62,20 @@ public class Creature extends Thread implements Entity {
     public void run() {
         while (true) {
             if (!isRunning) continue;
+            try {
+                Thread.sleep(calculateWaitTime());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             break;
         }
+    }
+
+    /**
+     * Calculates the wait time for one step of a creature
+     */
+    private long calculateWaitTime() {
+        return 1;
     }
 
     public boolean isRunning() {

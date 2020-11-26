@@ -6,13 +6,15 @@ public interface TraitBase {
 
     /**
      * When this trait is changed, this will be executed in order to modify the creature as needed
-     * @deprecated value changes should now be determined in creature wrapper classes for more flexibility
+     *
      * @return the resulting creature after value change
+     * @deprecated value changes should now be determined in creature wrapper classes for more flexibility
      */
     Creature onValueChange(Creature creature, int value);
 
     /**
      * When a creature has reproduced; changes the values randomly as needed (defines how often and how much to change trait values)
+     *
      * @return the new trait value
      */
     int creatureReproduce(int value);

@@ -35,13 +35,15 @@ public class APIManager {
         System.out.println(str);
         Yaml yaml = new Yaml();
         Map<String, Object> e = yaml.load(str);
-        if (e == null) throw new ConfigNotFoundException("No config found. Please create a config.yml file compiled in the jar. ");
+        if (e == null)
+            throw new ConfigNotFoundException("No config found. Please create a config.yml file compiled in the jar. ");
         return e;
     }
 
     private Object getEntry(String key, boolean isThrow) throws NoConfigEntryException, ConfigNotFoundException {
         if (config == null) throw new ConfigNotFoundException();
-        if (config.get(key) == null && isThrow) throw new NoConfigEntryException("No config entry provided for entry, " + key + ", when entry is required. ");
+        if (config.get(key) == null && isThrow)
+            throw new NoConfigEntryException("No config entry provided for entry, " + key + ", when entry is required. ");
         return config.get(key);
     }
 

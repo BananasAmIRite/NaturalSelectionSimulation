@@ -9,12 +9,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SimulationMap {
+    private int rows;
+    private int cols;
+    private final Simulation sim;
     private List<List<Tile>> map = new ArrayList<>();
     private List<Coordinate> sideCoords = new ArrayList<>();
-
-    private final int rows;
-    private final int cols;
-    private final Simulation sim;
 
     public SimulationMap(Simulation sim, int rows, int columns) {
         this.rows = rows;
@@ -95,22 +94,22 @@ public class SimulationMap {
     private void fillCoordsCache() {
         // top row
         for (int i = 0; i < this.cols; i++) {
-            sideCoords.add(new Coordinate(i, 0));
+            sideCoords.add(new Coordinate(sim, i, 0));
         }
 
         // bottom row
         for (int i = 0; i < this.cols; i++) {
-            sideCoords.add(new Coordinate(i, this.rows - 1));
+            sideCoords.add(new Coordinate(sim, i, this.rows - 1));
         }
 
         // left col
         for (int i = 0; i < this.rows; i++) {
-            sideCoords.add(new Coordinate(0, i));
+            sideCoords.add(new Coordinate(sim, 0, i));
         }
 
         // right col
         for (int i = 0; i < this.rows; i++) {
-            sideCoords.add(new Coordinate(this.cols - 1, i));
+            sideCoords.add(new Coordinate(sim, this.cols - 1, i));
         }
 
         sideCoords = sideCoords.stream().distinct().collect(Collectors.toList());
@@ -122,5 +121,13 @@ public class SimulationMap {
 
     public List<List<Tile>> getMap() {
         return map;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
+    public void setCols(int cols) {
+        this.cols = cols;
     }
 }

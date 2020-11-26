@@ -7,10 +7,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class CreaturesManager {
-    private int latestID = 0;
     private final HashMap<Integer, Creature> creatures = new HashMap<>();
-
     private final Simulation sim;
+    private int latestID = 0;
 
     public CreaturesManager(Simulation sim) {
         this.sim = sim;
@@ -19,7 +18,7 @@ public class CreaturesManager {
     public void registerCreature(Creature creature) {
         if (creature.getClass() != sim.getCreatureClass()) return;
         sim.setFirstStarted(true);
-        creatures.put(creature.getId(), creature);
+        creatures.put(creature.getCreatureID(), creature);
     }
 
     public void deregisterCreature(int id) {
