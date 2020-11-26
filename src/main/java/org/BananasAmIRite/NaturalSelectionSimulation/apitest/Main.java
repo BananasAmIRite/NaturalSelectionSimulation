@@ -1,9 +1,9 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.apiTest;
+package org.BananasAmIRite.NaturalSelectionSimulation.apitest;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.events.SimulationStartEvent;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationStartEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.NaturalSelection;
-import org.BananasAmIRite.NaturalSelectionSimulation.apiTest.Traits.Speed;
+import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Speed;
 
 public class Main extends NaturalSelection {
     public Main(Simulation simulation) throws InstantiationException, IllegalAccessException {

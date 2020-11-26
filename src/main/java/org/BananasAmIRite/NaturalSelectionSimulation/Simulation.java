@@ -1,9 +1,9 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.Listeners.CreaturesListener;
+import org.BananasAmIRite.NaturalSelectionSimulation.listeners.CreaturesListener;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.APIManager;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.EventManager;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.TraitsAPI.TraitManager;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.EventManager;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.TraitManager;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 
 public class Simulation {

@@ -1,4 +1,4 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.exceptions.ConfigExceptions;
+package org.BananasAmIRite.NaturalSelectionSimulation.exceptions.configexceptions;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.exceptions.ConfigException;
 

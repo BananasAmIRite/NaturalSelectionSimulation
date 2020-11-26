@@ -1,4 +1,4 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.api.TraitsAPI;
+package org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi;
 
 public abstract class Trait implements TraitBase {
     private int lowestValue = 0;

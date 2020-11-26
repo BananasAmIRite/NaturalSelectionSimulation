@@ -26,7 +26,7 @@ public class CreaturesManager {
     }
 
     public void deregisterCreature(Creature creature) {
-        creatures.remove(creature.getId());
+        creatures.remove(creature.getCreatureID());
     }
 
     public void incrementLatestID() {

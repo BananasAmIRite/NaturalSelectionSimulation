@@ -1,4 +1,4 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI;
+package org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi;
 
 /**
  * Interface for adding listeners

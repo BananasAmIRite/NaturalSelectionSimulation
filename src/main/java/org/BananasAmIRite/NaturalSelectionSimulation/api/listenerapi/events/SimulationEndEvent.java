@@ -1,4 +1,4 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.events;
+package org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events;
 
 public class SimulationEndEvent extends SimulationEvent {
     public SimulationEndEvent() {

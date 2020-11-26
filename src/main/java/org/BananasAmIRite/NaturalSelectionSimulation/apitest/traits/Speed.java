@@ -1,6 +1,6 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.apiTest.Traits;
+package org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.api.TraitsAPI.Trait;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Trait;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 
 public class Speed extends Trait {

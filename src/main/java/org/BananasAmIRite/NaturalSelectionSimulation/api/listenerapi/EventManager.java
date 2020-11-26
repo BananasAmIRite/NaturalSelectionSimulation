@@ -1,7 +1,7 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI;
+package org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.annotations.EventHandler;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.enums.EventPriority;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.annotations.EventHandler;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.enums.EventPriority;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Pair;
 
 import java.lang.reflect.Method;

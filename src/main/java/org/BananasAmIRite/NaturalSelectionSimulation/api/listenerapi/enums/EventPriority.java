@@ -1,4 +1,4 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.enums;
+package org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.enums;
 
 public enum EventPriority {
 

@@ -1,4 +1,4 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.events;
+package org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Coordinate;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;

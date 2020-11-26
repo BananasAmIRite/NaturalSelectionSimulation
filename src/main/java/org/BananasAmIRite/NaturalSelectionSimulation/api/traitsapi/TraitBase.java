@@ -1,4 +1,4 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.api.TraitsAPI;
+package org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 

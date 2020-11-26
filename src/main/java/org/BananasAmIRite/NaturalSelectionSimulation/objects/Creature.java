@@ -1,7 +1,7 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.TraitsAPI.Traits;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
 
 public class Creature extends Thread implements Entity {
     private final int id;

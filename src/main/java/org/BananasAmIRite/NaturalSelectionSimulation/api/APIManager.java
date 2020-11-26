@@ -2,8 +2,8 @@ package org.BananasAmIRite.NaturalSelectionSimulation.api;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.exceptions.ClassUnassignableException;
-import org.BananasAmIRite.NaturalSelectionSimulation.exceptions.ConfigExceptions.ConfigNotFoundException;
-import org.BananasAmIRite.NaturalSelectionSimulation.exceptions.ConfigExceptions.NoConfigEntryException;
+import org.BananasAmIRite.NaturalSelectionSimulation.exceptions.configexceptions.ConfigNotFoundException;
+import org.BananasAmIRite.NaturalSelectionSimulation.exceptions.configexceptions.NoConfigEntryException;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.InputStream;

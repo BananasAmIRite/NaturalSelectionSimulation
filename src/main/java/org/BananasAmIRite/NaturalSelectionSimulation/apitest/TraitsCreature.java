@@ -1,4 +1,4 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.apiTest;
+package org.BananasAmIRite.NaturalSelectionSimulation.apitest;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;

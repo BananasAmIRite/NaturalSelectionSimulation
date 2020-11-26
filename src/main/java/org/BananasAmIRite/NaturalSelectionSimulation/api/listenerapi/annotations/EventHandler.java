@@ -1,6 +1,6 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.annotations;
+package org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.annotations;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.api.ListenerAPI.enums.EventPriority;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.enums.EventPriority;
 
 import java.lang.annotation.*;
 
