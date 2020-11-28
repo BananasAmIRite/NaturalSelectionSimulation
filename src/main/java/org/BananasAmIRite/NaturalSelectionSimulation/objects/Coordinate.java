@@ -14,17 +14,16 @@ public class Coordinate implements Comparable<Coordinate> {
     }
 
     public static Coordinate move(Coordinate originalCoords, Direction direction, int amount) {
-        switch (direction) {
-            case UP:
-            default:
-                return originalCoords.add(0, -(amount));
-            case DOWN:
-                return originalCoords.add(0, amount);
-            case LEFT:
-                return originalCoords.add(-(amount), 0);
-            case RIGHT:
-                return originalCoords.add(amount, 0);
-        }
+        return switch (direction) {
+            default -> originalCoords.add(0, -(amount));
+            case DOWN -> originalCoords.add(0, amount);
+            case LEFT -> originalCoords.add(-(amount), 0);
+            case RIGHT -> originalCoords.add(amount, 0);
+        };
+    }
+
+    public Coordinate move(Direction direction, int amount) {
+        return move(this, direction, amount);
     }
 
     public int getX() {
@@ -62,7 +61,7 @@ public class Coordinate implements Comparable<Coordinate> {
 
     public Coordinate add(int x, int y) {
         Coordinate coords = new Coordinate(this.simulation, this.x + x, this.y + y);
-        ;
+        
 
         if (coords.getX() < 0) coords = new Coordinate(this.simulation, 0, coords.getY());
         if (coords.getX() > simulation.getSizeX() - 1)

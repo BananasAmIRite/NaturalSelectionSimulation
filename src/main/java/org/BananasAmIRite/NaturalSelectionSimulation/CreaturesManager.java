@@ -50,4 +50,16 @@ public class CreaturesManager {
 
         return coords.get((int) Math.floor(Math.random() * coords.size()));
     }
+
+    public void pauseAll() {
+        for (Creature creature : creatures.values()) {
+            creature.pause();
+        }
+    }
+
+    public void playAll() {
+        for (Creature creature : creatures.values()) {
+            creature.play();
+        }
+    }
 }

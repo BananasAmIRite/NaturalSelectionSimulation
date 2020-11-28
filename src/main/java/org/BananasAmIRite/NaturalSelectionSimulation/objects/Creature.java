@@ -9,16 +9,23 @@ public class Creature extends Thread implements Entity {
     private Coordinate home;
     private Coordinate location;
     private Traits traits;
-    private boolean isRunning = true;
+
+    // multithreading stuff
+    private final Object lock;
+    private boolean waitQueue;
+    private boolean isDead;
 
     public Creature(Simulation sim, int id) throws IllegalAccessException, InstantiationException {
         this.id = id;
         this.simulation = sim;
         this.traits = new Traits();
 
+        this.lock = new Object();
+
         simulation.getCreaturesManager().registerCreature(this);
         simulation.getTraitManager().addToCreature(this);
         setHome(this.simulation.getCreaturesManager().generateHome());
+        setLocation(this.getHome());  // on creation of creature, default location is home
     }
 
     public Coordinate getHome() {
@@ -35,6 +42,7 @@ public class Creature extends Thread implements Entity {
 
     public Coordinate getLocation() {
         return location;
+
     }
 
     public boolean setLocation(Coordinate location) {
@@ -59,30 +67,55 @@ public class Creature extends Thread implements Entity {
                 '}';
     }
 
+    // not busy waiting
+    @SuppressWarnings("BusyWait")
     public void run() {
-        while (true) {
-            if (!isRunning) continue;
+        while (!isDead) {
             try {
+
+                if (waitQueue) {
+                    synchronized (lock) {
+                        lock.wait();
+                    }
+                    waitQueue = false;
+                }
+
+                // tasks
                 Thread.sleep(calculateWaitTime());
-            } catch (InterruptedException e) {
+
+                doTasks();
+
+             } catch (Exception e) {
                 e.printStackTrace();
             }
-            break;
+        }
+    }
+
+    public void pause() {
+        this.waitQueue = true;
+    }
+
+    public void play() {
+        this.waitQueue = false;
+        synchronized (lock) {
+            lock.notify();
         }
     }
 
     /**
-     * Calculates the wait time for one step of a creature
+     * Calculates the wait time (milliseconds) for one step of a creature
      */
     private long calculateWaitTime() {
         return 1;
     }
 
-    public boolean isRunning() {
-        return isRunning;
+    /**
+     * method containing all the tasks the creature will do (such as movement, increasing hunger)
+     *
+     * */
+    protected void doTasks() {
+
     }
 
-    public void setRunning(boolean running) {
-        isRunning = running;
-    }
+
 }
