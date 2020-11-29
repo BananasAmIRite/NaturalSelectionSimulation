@@ -3,6 +3,8 @@ package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
 
+import java.util.Random;
+
 public class Creature extends Thread implements Entity {
     private final int id;
     private final Simulation simulation;
@@ -15,12 +17,15 @@ public class Creature extends Thread implements Entity {
     private boolean waitQueue;
     private boolean isDead;
 
+    private Random RANDOM;
+
     public Creature(Simulation sim, int id) throws IllegalAccessException, InstantiationException {
         this.id = id;
         this.simulation = sim;
         this.traits = new Traits();
 
         this.lock = new Object();
+        this.RANDOM = new Random();
 
         simulation.getCreaturesManager().registerCreature(this);
         simulation.getTraitManager().addToCreature(this);
@@ -114,7 +119,7 @@ public class Creature extends Thread implements Entity {
      *
      * */
     protected void doTasks() {
-
+        setLocation(getLocation().move(Coordinate.DIRECTIONS.get(RANDOM.nextInt(Coordinate.DIRECTIONS.size())), 1));
     }
 
 

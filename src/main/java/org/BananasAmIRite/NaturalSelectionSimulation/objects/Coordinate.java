@@ -2,10 +2,14 @@ package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 
+import java.util.List;
+
 public class Coordinate implements Comparable<Coordinate> {
     private final int x;
     private final int y;
     private Simulation simulation;
+
+    public static final List<Direction> DIRECTIONS = List.of(Direction.values());
 
     public Coordinate(Simulation sim, int x, int y) {
         this.simulation = sim;
@@ -61,7 +65,7 @@ public class Coordinate implements Comparable<Coordinate> {
 
     public Coordinate add(int x, int y) {
         Coordinate coords = new Coordinate(this.simulation, this.x + x, this.y + y);
-        
+
 
         if (coords.getX() < 0) coords = new Coordinate(this.simulation, 0, coords.getY());
         if (coords.getX() > simulation.getSizeX() - 1)
