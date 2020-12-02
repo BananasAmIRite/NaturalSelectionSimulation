@@ -2,8 +2,11 @@ package org.BananasAmIRite.NaturalSelectionSimulation;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Coordinate;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
+import org.BananasAmIRite.NaturalSelectionSimulation.objects.SimulationCoordinate;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Tile;
+import org.BananasAmIRite.NaturalSelectionSimulation.utils.CoordinateUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -33,13 +36,13 @@ public class SimulationMap {
      *
      * @return a new map
      */
-    public static <T> List<List<T>> createMap(Class<T> clazz, int rows, int columns) throws IllegalAccessException, InstantiationException {
+    public static <T> List<List<T>> createMap(Class<T> clazz, int rows, int columns) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         List<List<T>> map = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
             List<T> l = new ArrayList<>();
 
             for (int j = 0; j < columns; j++) {
-                l.add(clazz.newInstance());
+                l.add(clazz.getDeclaredConstructor().newInstance());
             }
 
             map.add(l);
@@ -47,7 +50,7 @@ public class SimulationMap {
         return map;
     }
 
-    private void generateMap(int rows, int columns) throws InstantiationException, IllegalAccessException {
+    private void generateMap(int rows, int columns) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         map = createMap(Tile.class, rows, columns);
     }
 
@@ -60,14 +63,7 @@ public class SimulationMap {
         }
 
         if (before != null) {
-            try {
-                map.get(after.getY());
-                map.get(after.getY()).get(after.getX());
-                map.get(before.getY());
-                map.get(before.getY()).get(before.getX());
-            } catch (Exception e) {
-                return false;
-            } // further prove that the coords are safe
+            if (!CoordinateUtils.isCoordinatesSafe(sim, before) || !CoordinateUtils.isCoordinatesSafe(sim, after)) return false;
         }
 
         List<List<Tile>> backupMap = map; // restore if something goes wrong
@@ -94,22 +90,22 @@ public class SimulationMap {
     private void fillCoordsCache() {
         // top row
         for (int i = 0; i < this.cols; i++) {
-            sideCoords.add(new Coordinate(sim, i, 0));
+            sideCoords.add(new SimulationCoordinate(sim, i, 0));
         }
 
         // bottom row
         for (int i = 0; i < this.cols; i++) {
-            sideCoords.add(new Coordinate(sim, i, this.rows - 1));
+            sideCoords.add(new SimulationCoordinate(sim, i, this.rows - 1));
         }
 
         // left col
         for (int i = 0; i < this.rows; i++) {
-            sideCoords.add(new Coordinate(sim, 0, i));
+            sideCoords.add(new SimulationCoordinate(sim, 0, i));
         }
 
         // right col
         for (int i = 0; i < this.rows; i++) {
-            sideCoords.add(new Coordinate(sim, this.cols - 1, i));
+            sideCoords.add(new SimulationCoordinate(sim, this.cols - 1, i));
         }
 
         sideCoords = sideCoords.stream().distinct().collect(Collectors.toList());

@@ -17,7 +17,7 @@ public class Creature extends Thread implements Entity {
     private boolean waitQueue;
     private boolean isDead;
 
-    private Random RANDOM;
+    private final Random RANDOM;
 
     public Creature(Simulation sim, int id) throws IllegalAccessException, InstantiationException {
         this.id = id;
@@ -110,7 +110,7 @@ public class Creature extends Thread implements Entity {
     /**
      * Calculates the wait time (milliseconds) for one step of a creature
      */
-    private long calculateWaitTime() {
+    protected long calculateWaitTime() {
         return 1;
     }
 
@@ -120,7 +120,11 @@ public class Creature extends Thread implements Entity {
      * */
     protected void doTasks() {
         setLocation(getLocation().move(Coordinate.DIRECTIONS.get(RANDOM.nextInt(Coordinate.DIRECTIONS.size())), 1));
+
+        // set energy
     }
 
-
+    protected void searchHome() {
+        
+    }
 }

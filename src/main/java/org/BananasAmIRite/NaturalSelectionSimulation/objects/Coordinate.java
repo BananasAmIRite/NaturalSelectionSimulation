@@ -1,18 +1,14 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
-
 import java.util.List;
 
 public class Coordinate implements Comparable<Coordinate> {
-    private final int x;
-    private final int y;
-    private Simulation simulation;
+    protected final int x;
+    protected final int y;
 
     public static final List<Direction> DIRECTIONS = List.of(Direction.values());
 
-    public Coordinate(Simulation sim, int x, int y) {
-        this.simulation = sim;
+    public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -64,16 +60,7 @@ public class Coordinate implements Comparable<Coordinate> {
     }
 
     public Coordinate add(int x, int y) {
-        Coordinate coords = new Coordinate(this.simulation, this.x + x, this.y + y);
-
-
-        if (coords.getX() < 0) coords = new Coordinate(this.simulation, 0, coords.getY());
-        if (coords.getX() > simulation.getSizeX() - 1)
-            coords = new Coordinate(this.simulation, simulation.getSizeX() - 1, coords.getY());
-        if (coords.getY() < 0) coords = new Coordinate(this.simulation, coords.getX(), 0);
-        if (coords.getY() > simulation.getSizeY() - 1)
-            coords = new Coordinate(this.simulation, coords.getX(), simulation.getSizeY() - 1);
-        return coords;
+        return new Coordinate(this.x + x, this.y + y);
     }
 
     public enum Direction {
