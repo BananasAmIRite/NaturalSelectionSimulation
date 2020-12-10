@@ -3,6 +3,7 @@ package org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi;
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,7 +24,8 @@ public class TraitManager extends AbstractTraitManager {
         traits.add(trait);
     }
 
-    public void addToCreature(Creature c) throws InstantiationException, IllegalAccessException {
+    @Override
+    public void addToCreature(Creature c) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         for (Class<? extends Trait> trait : traits) {
             c.getTraits().addTrait(trait);
         }

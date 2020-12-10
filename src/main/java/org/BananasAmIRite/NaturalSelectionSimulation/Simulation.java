@@ -1,10 +1,11 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.listeners.CreaturesListener;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.APIManager;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.EventManager;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.TraitManager;
+import org.BananasAmIRite.NaturalSelectionSimulation.listeners.CreaturesListener;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
+import org.BananasAmIRite.NaturalSelectionSimulation.traits.EnergyTrait;
 
 public class Simulation {
     private final EventManager eventManager;
@@ -18,7 +19,7 @@ public class Simulation {
     private int sizeX;
     private int sizeY;
 
-    public Simulation(int x, int y) {
+    public Simulation(int x, int y)  {
         eventManager = new EventManager();
         this.sizeX = x;
         this.sizeY = y;
@@ -28,6 +29,9 @@ public class Simulation {
         traitManager = new TraitManager(this);
         apiManager = new APIManager(this);
         getEventManager().registerEventListener(cListener);
+
+        registerNativeAPIUsages();
+
         try {
             // run api main class
             apiManager.initMainClass();
@@ -35,6 +39,10 @@ public class Simulation {
             e.printStackTrace();
         }
 
+    }
+
+    private void registerNativeAPIUsages() {
+        traitManager.registerTrait(EnergyTrait.class);
     }
 
     public SimulationMap getMap() {

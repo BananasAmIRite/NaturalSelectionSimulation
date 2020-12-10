@@ -10,8 +10,8 @@ public class SimulationCoordinate extends Coordinate {
     }
 
     @Override
-    public Coordinate add(int x, int y) {
-        Coordinate coords = new SimulationCoordinate(this.simulation, this.x + x, this.y + y);
+    public SimulationCoordinate add(int x, int y) {
+        SimulationCoordinate coords = new SimulationCoordinate(this.simulation, this.x + x, this.y + y);
 
         if (coords.getX() < 0) coords = new SimulationCoordinate(this.simulation, 0, coords.getY());
         if (coords.getX() > simulation.getSizeX() - 1)
@@ -24,5 +24,16 @@ public class SimulationCoordinate extends Coordinate {
 
     public Simulation getSimulation() {
         return simulation;
+    }
+
+    public static SimulationCoordinate asSimulationCoord(Coordinate e, Simulation sim) {
+        return new SimulationCoordinate(sim, e.getX(), e.getY());
+    }
+
+    @Override
+    public SimulationCoordinate move(Direction direction, int amount) {
+        Coordinate coord = move(this, direction, amount);
+
+        return asSimulationCoord(coord, getSimulation());
     }
 }

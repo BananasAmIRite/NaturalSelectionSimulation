@@ -1,21 +1,20 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits;
+package org.BananasAmIRite.NaturalSelectionSimulation.traits;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Trait;
 
-public class Speed extends Trait {
+public class EnergyTrait extends Trait {
 
-    public Speed() {
-
+    public EnergyTrait() {
     }
 
     @Override
     public double creatureReproduce(double value) {
-        // no change during reproduction
-        return value;
+        return 0;
     }
 
     @Override
     public void setValues() {
-
+        setDefaultValue(400);
+        setLowestValue(0);
     }
 }

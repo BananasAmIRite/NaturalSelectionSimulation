@@ -1,39 +1,47 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi;
 
+import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
+
 public abstract class Trait implements TraitBase {
-    private int lowestValue = 0;
-    private int highestValue = 0;
-    private int defaultValue = 1;
+    protected double lowestValue = 0;
+    protected double highestValue = 0;
+    protected double defaultValue = 1;
+    protected double currentValue;
     private String ID = getClass().getSimpleName();
 
+    public Trait() {
+        setValues();
+        currentValue = defaultValue;
+    }
+
     @Override
-    public final int getLowestValue() {
+    public double getLowestValue() {
         return lowestValue;
     }
 
     @Override
-    public final void setLowestValue(int lowest) {
+    public final void setLowestValue(double lowest) {
         this.lowestValue = lowest;
     }
 
     @Override
-    public final int getHighestValue() {
+    public double getHighestValue() {
         return highestValue;
     }
 
     @Override
-    public final void setHighestValue(int highest) {
+    public final void setHighestValue(double highest) {
         this.highestValue = highest;
     }
 
     @Override
-    public final int getDefaultValue() {
+    public final double getDefaultValue() {
         return defaultValue;
     }
 
     @Override
     public final void setDefaultValue(int value) {
-        if (this.defaultValue > highestValue && highestValue != 0) return;
+        if (!isSettable(value)) return;
         this.defaultValue = value;
     }
 
@@ -45,5 +53,23 @@ public abstract class Trait implements TraitBase {
     @Override
     public final void setID(String ID) {
         this.ID = ID;
+    }
+
+    @Override
+    public final Creature onValueChange(Creature creature, int value) {
+        // make unimplementable because deprecated but too lazy to remove
+        return creature;
+    }
+
+    public boolean isSettable(double value) {
+        return (value <= highestValue || highestValue == 0) && (value >= lowestValue);
+    }
+
+    public void setValue(double value) {
+        this.currentValue = value;
+    }
+
+    public double getValue() {
+        return currentValue;
     }
 }

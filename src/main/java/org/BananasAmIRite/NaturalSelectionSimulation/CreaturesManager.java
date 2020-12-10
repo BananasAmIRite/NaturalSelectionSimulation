@@ -1,7 +1,7 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.objects.Coordinate;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
+import org.BananasAmIRite.NaturalSelectionSimulation.objects.SimulationCoordinate;
 
 import java.util.HashMap;
 import java.util.List;
@@ -45,8 +45,8 @@ public class CreaturesManager {
         }
     }
 
-    public Coordinate generateHome() {
-        List<Coordinate> coords = sim.getMap().getSideCoords();
+    public SimulationCoordinate generateHome() {
+        List<SimulationCoordinate> coords = sim.getMap().getSideCoords();
 
         return coords.get((int) Math.floor(Math.random() * coords.size()));
     }

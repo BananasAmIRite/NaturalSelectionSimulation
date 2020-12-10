@@ -2,14 +2,17 @@ package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
+import org.BananasAmIRite.NaturalSelectionSimulation.traits.EnergyTrait;
+import org.BananasAmIRite.NaturalSelectionSimulation.utils.CoordinateUtils;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Random;
 
 public class Creature extends Thread implements Entity {
     private final int id;
     private final Simulation simulation;
-    private Coordinate home;
-    private Coordinate location;
+    private SimulationCoordinate home;
+    private SimulationCoordinate location;
     private Traits traits;
 
     // multithreading stuff
@@ -19,7 +22,7 @@ public class Creature extends Thread implements Entity {
 
     private final Random RANDOM;
 
-    public Creature(Simulation sim, int id) throws IllegalAccessException, InstantiationException {
+    public Creature(Simulation sim, int id) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         this.id = id;
         this.simulation = sim;
         this.traits = new Traits();
@@ -31,13 +34,16 @@ public class Creature extends Thread implements Entity {
         simulation.getTraitManager().addToCreature(this);
         setHome(this.simulation.getCreaturesManager().generateHome());
         setLocation(this.getHome());  // on creation of creature, default location is home
+
+        System.out.println("EnergyTrait Value: ");
+        System.out.println(getTraits().getTrait(EnergyTrait.class));
     }
 
-    public Coordinate getHome() {
+    public SimulationCoordinate getHome() {
         return home;
     }
 
-    public void setHome(Coordinate home) {
+    public void setHome(SimulationCoordinate home) {
         this.home = home;
     }
 
@@ -45,12 +51,12 @@ public class Creature extends Thread implements Entity {
         return id;
     }
 
-    public Coordinate getLocation() {
+    public SimulationCoordinate getLocation() {
         return location;
 
     }
 
-    public boolean setLocation(Coordinate location) {
+    public boolean setLocation(SimulationCoordinate location) {
         if (!simulation.getMap().changeCreatureLocation(this, this.location, location)) return false;
         this.location = location;
 
@@ -121,10 +127,37 @@ public class Creature extends Thread implements Entity {
     protected void doTasks() {
         setLocation(getLocation().move(Coordinate.DIRECTIONS.get(RANDOM.nextInt(Coordinate.DIRECTIONS.size())), 1));
 
-        // set energy
+        // TODO: add energy system
+        // TODO: setup food/home logic (energy > calcEnergyDistance(Coordinate coordToHome) ? food() : home())
+
+        System.out.println(getTraits().getTrait(EnergyTrait.class));
+
+        //  set energy
     }
 
-    protected void searchHome() {
-        
+    /**
+     * Finds home, then goes one step towards it
+     *
+     * Moves x first, then y
+     *
+     * @return if creature is already at home
+     * */
+    protected boolean searchHome() {
+        Coordinate coordsToHome = getToHome();
+
+        if (coordsToHome.getX() != 0) {
+            setLocation(getLocation().add((coordsToHome.getX() > 0 ? 1 : -1),0));
+            return false;
+        }
+        if (coordsToHome.getY() != 0) {
+            setLocation(getLocation().add(0,(coordsToHome.getY() > 0 ? 1 : -1)));
+            return false;
+        }
+        // otherwise at home
+        return true;
+    }
+
+    public Coordinate getToHome() {
+        return CoordinateUtils.pathFind(getLocation(), getHome());
     }
 }

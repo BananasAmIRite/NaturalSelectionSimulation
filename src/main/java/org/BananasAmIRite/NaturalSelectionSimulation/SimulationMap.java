@@ -16,7 +16,7 @@ public class SimulationMap {
     private int cols;
     private final Simulation sim;
     private List<List<Tile>> map = new ArrayList<>();
-    private List<Coordinate> sideCoords = new ArrayList<>();
+    private List<SimulationCoordinate> sideCoords = new ArrayList<>();
 
     public SimulationMap(Simulation sim, int rows, int columns) {
         this.rows = rows;
@@ -80,11 +80,7 @@ public class SimulationMap {
             return false;
         }
 
-        if (after.equals(before)) {
-            return false;
-        }
-
-        return true;
+        return !after.equals(before);
     }
 
     private void fillCoordsCache() {
@@ -111,7 +107,7 @@ public class SimulationMap {
         sideCoords = sideCoords.stream().distinct().collect(Collectors.toList());
     }
 
-    public List<Coordinate> getSideCoords() {
+    public List<SimulationCoordinate> getSideCoords() {
         return sideCoords;
     }
 
