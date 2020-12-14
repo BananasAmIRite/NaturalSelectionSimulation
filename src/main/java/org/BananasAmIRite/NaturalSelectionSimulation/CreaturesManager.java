@@ -1,8 +1,10 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.CreatureAddEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.SimulationCoordinate;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,15 +20,21 @@ public class CreaturesManager {
     public void registerCreature(Creature creature) {
         if (creature.getClass() != sim.getCreatureClass()) return;
         sim.setFirstStarted(true);
-        creatures.put(creature.getCreatureID(), creature);
+        creatures.put(creature.getEntityID(), creature);
+        sim.getEventManager().fireEvent(new CreatureAddEvent(sim.getMap().getMap(), creature));
     }
 
     public void deregisterCreature(int id) {
+        if (creatures.get(id) == null) return;
+        creatures.get(id).removeFromMap();
+        sim.getEventManager().fireEvent(new CreatureAddEvent(sim.getMap().getMap(), creatures.get(id)));
         creatures.remove(id);
     }
 
     public void deregisterCreature(Creature creature) {
-        creatures.remove(creature.getCreatureID());
+        creatures.remove(creature.getEntityID());
+        creature.removeFromMap();
+        sim.getEventManager().fireEvent(new CreatureAddEvent(sim.getMap().getMap(), creature));
     }
 
     public void incrementLatestID() {
@@ -41,7 +49,7 @@ public class CreaturesManager {
 
     public void returnAllHome() {
         for (Creature value : creatures.values()) {
-            value.setLocation(value.getHome());
+            value.moveToLocation(value.getHome());
         }
     }
 
@@ -61,5 +69,13 @@ public class CreaturesManager {
         for (Creature creature : creatures.values()) {
             creature.play();
         }
+    }
+
+    public Collection<Creature> getCreatures() {
+        return creatures.values();
+    }
+
+    public Creature getCreature(int id) {
+        return creatures.get(id);
     }
 }

@@ -1,14 +1,9 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
-import java.util.Arrays;
-
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println(Arrays.toString(args));
         Simulation sim = new Simulation(10, 10);
-        System.out.println(sim.getMap().getMap());
-        System.out.println("test");
 
 
  

@@ -67,13 +67,7 @@ public interface TraitBase {
 
     /**
      * Sets the default value of this trait
-     * Value must be set at method, {@link #setValues()} or it will not apply
+     * Value must be set at method, {@link Trait#setValues()} or it will not apply
      */
     void setDefaultValue(int value);
-
-    /**
-     * Overridable method that sets all the values (eg. {@link Trait#lowestValue}, {@link Trait#highestValue})
-     *
-     * */
-    void setValues();
 }

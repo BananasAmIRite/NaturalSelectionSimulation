@@ -32,7 +32,6 @@ public class APIManager {
 
     private Map<String, Object> getConfigFile() throws ConfigNotFoundException {
         InputStream str = getClass().getClassLoader().getResourceAsStream("config.yml");
-        System.out.println(str);
         Yaml yaml = new Yaml();
         Map<String, Object> e = yaml.load(str);
         if (e == null)

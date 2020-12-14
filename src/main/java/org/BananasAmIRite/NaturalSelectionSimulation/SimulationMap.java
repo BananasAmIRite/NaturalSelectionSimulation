@@ -36,13 +36,13 @@ public class SimulationMap {
      *
      * @return a new map
      */
-    public static <T> List<List<T>> createMap(Class<T> clazz, int rows, int columns) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    public static <T> List<List<T>> createMap(Class<T> clazz, int rows, int columns, Simulation sim) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         List<List<T>> map = new ArrayList<>();
         for (int i = 0; i < rows; i++) {
             List<T> l = new ArrayList<>();
 
             for (int j = 0; j < columns; j++) {
-                l.add(clazz.getDeclaredConstructor().newInstance());
+                l.add(clazz.getDeclaredConstructor(SimulationCoordinate.class).newInstance(new SimulationCoordinate(sim, i, j)));
             }
 
             map.add(l);
@@ -51,7 +51,7 @@ public class SimulationMap {
     }
 
     private void generateMap(int rows, int columns) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
-        map = createMap(Tile.class, rows, columns);
+        map = createMap(Tile.class, rows, columns, sim);
     }
 
     /**

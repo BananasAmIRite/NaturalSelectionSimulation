@@ -2,7 +2,6 @@ package org.BananasAmIRite.NaturalSelectionSimulation.apitest;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.NaturalSelection;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationStartEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Speed;
 
 import java.lang.reflect.InvocationTargetException;
@@ -11,11 +10,22 @@ public class Main extends NaturalSelection {
     public Main(Simulation simulation) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         super(simulation);
         System.out.println("MAIN API CLASS INITIALIZED");
-        getSimulation().getEventManager().fireEvent(new SimulationStartEvent());
         simulation.setCreatureClass(TraitsCreature.class);
         simulation.getTraitManager().registerTrait(Speed.class);
+
+        DisplayListener listener = new DisplayListener(simulation.getSizeX(), simulation.getSizeY(), simulation);
+        SimulationController simController = new SimulationController(simulation);
+
+        getSimulation().getEventManager().registerEventListener(listener);
+
+        // creature of first creature
         TraitsCreature c = new TraitsCreature(simulation, 0);
+        c.start();
+
+        // second creature cuz why not
+        TraitsCreature c2 = new TraitsCreature(simulation, 1);
+        c2.start();
+
         simulation.getCreaturesManager().returnAllHome();
-        System.out.println(c);
     }
 }

@@ -21,7 +21,6 @@ public class EventManager extends AbstractEventManager {
 
     @Override
     public void fireEvent(Event evt) {
-        System.out.println(getAllMethods(evt));
         for (Pair<EventPriority, Pair<Listener, Method>> allMethod : getAllMethods(evt)) {
             try {
                 allMethod.getValue().getValue().invoke(allMethod.getValue().getKey(), evt);

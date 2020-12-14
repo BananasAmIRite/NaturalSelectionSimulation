@@ -72,4 +72,10 @@ public abstract class Trait implements TraitBase {
     public double getValue() {
         return currentValue;
     }
+
+    /**
+     * Overridable method that sets all the values (eg. {@link Trait#lowestValue}, {@link Trait#highestValue})
+     *
+     * */
+    protected abstract void setValues();
 }

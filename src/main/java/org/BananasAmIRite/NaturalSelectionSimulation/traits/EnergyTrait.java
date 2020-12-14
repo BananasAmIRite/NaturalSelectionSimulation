@@ -13,7 +13,7 @@ public class EnergyTrait extends Trait {
     }
 
     @Override
-    public void setValues() {
+    protected void setValues() {
         setDefaultValue(400);
         setLowestValue(0);
     }

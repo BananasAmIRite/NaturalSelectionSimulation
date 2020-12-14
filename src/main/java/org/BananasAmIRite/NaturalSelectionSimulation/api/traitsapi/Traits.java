@@ -20,14 +20,25 @@ public class Traits {
         return data;
     }
 
-    public Double getTrait(Class<? extends Trait> clazz) {
+    public Trait getTrait(Class<? extends Trait> clazz) {
+        for (Trait trait : data) {
+            if (trait.getClass() == clazz) return trait;
+        }
+        return null;
+    }
+
+    public Double getTraitValue(Class<? extends Trait> clazz) {
         for (Trait trait : data) {
             if (trait.getClass() == clazz) return trait.getValue();
         }
         return null;
     }
 
-    public void setTrait(Trait trait, int value) {
-        if (trait.isSettable(value)) trait.setValue(value);
+    public void setTrait(Class<? extends Trait> trait, int value) {
+        Trait t = getTrait(trait);
+
+        if (t == null) return;
+
+        if (t.isSettable(value)) t.setValue(value);
     }
 }

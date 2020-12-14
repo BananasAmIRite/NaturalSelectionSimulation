@@ -15,7 +15,7 @@ public class Speed extends Trait {
     }
 
     @Override
-    public void setValues() {
+    protected void setValues() {
 
     }
 }

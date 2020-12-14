@@ -1,6 +1,7 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.CreatureMoveEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
 import org.BananasAmIRite.NaturalSelectionSimulation.traits.EnergyTrait;
 import org.BananasAmIRite.NaturalSelectionSimulation.utils.CoordinateUtils;
@@ -13,6 +14,7 @@ public class Creature extends Thread implements Entity {
     private final Simulation simulation;
     private SimulationCoordinate home;
     private SimulationCoordinate location;
+    private final String abb = "c";
     private Traits traits;
 
     // multithreading stuff
@@ -30,13 +32,19 @@ public class Creature extends Thread implements Entity {
         this.lock = new Object();
         this.RANDOM = new Random();
 
-        simulation.getCreaturesManager().registerCreature(this);
         simulation.getTraitManager().addToCreature(this);
         setHome(this.simulation.getCreaturesManager().generateHome());
         setLocation(this.getHome());  // on creation of creature, default location is home
 
+        // creature trait test
         System.out.println("EnergyTrait Value: ");
-        System.out.println(getTraits().getTrait(EnergyTrait.class));
+        System.out.println(getTraits().getTraitValue(EnergyTrait.class));
+        getTraits().setTrait(EnergyTrait.class, 10);
+        System.out.println(getTraits().getTraitValue(EnergyTrait.class));
+        getTraits().setTrait(EnergyTrait.class, -1);
+        System.out.println(getTraits().getTraitValue(EnergyTrait.class));
+
+        simulation.getCreaturesManager().registerCreature(this);
     }
 
     public SimulationCoordinate getHome() {
@@ -47,8 +55,13 @@ public class Creature extends Thread implements Entity {
         this.home = home;
     }
 
-    public int getCreatureID() {
+    public int getEntityID() {
         return id;
+    }
+
+    @Override
+    public String getEntityAbbreviation() {
+        return abb;
     }
 
     public SimulationCoordinate getLocation() {
@@ -92,7 +105,7 @@ public class Creature extends Thread implements Entity {
                 }
 
                 // tasks
-                Thread.sleep(calculateWaitTime());
+                Thread.sleep(calculateWaitTime() * 1000);
 
                 doTasks();
 
@@ -125,12 +138,12 @@ public class Creature extends Thread implements Entity {
      *
      * */
     protected void doTasks() {
-        setLocation(getLocation().move(Coordinate.DIRECTIONS.get(RANDOM.nextInt(Coordinate.DIRECTIONS.size())), 1));
+        moveToLocation(getLocation().move(Coordinate.DIRECTIONS.get(RANDOM.nextInt(Coordinate.DIRECTIONS.size())), 1));
 
         // TODO: add energy system
         // TODO: setup food/home logic (energy > calcEnergyDistance(Coordinate coordToHome) ? food() : home())
 
-        System.out.println(getTraits().getTrait(EnergyTrait.class));
+        // System.out.println(getTraits().getTrait(EnergyTrait.class));
 
         //  set energy
     }
@@ -146,11 +159,11 @@ public class Creature extends Thread implements Entity {
         Coordinate coordsToHome = getToHome();
 
         if (coordsToHome.getX() != 0) {
-            setLocation(getLocation().add((coordsToHome.getX() > 0 ? 1 : -1),0));
+            moveToLocation(getLocation().add((coordsToHome.getX() > 0 ? 1 : -1),0));
             return false;
         }
         if (coordsToHome.getY() != 0) {
-            setLocation(getLocation().add(0,(coordsToHome.getY() > 0 ? 1 : -1)));
+            moveToLocation(getLocation().add(0,(coordsToHome.getY() > 0 ? 1 : -1)));
             return false;
         }
         // otherwise at home
@@ -159,5 +172,31 @@ public class Creature extends Thread implements Entity {
 
     public Coordinate getToHome() {
         return CoordinateUtils.pathFind(getLocation(), getHome());
+    }
+
+    /**
+     * Should ONLY be used when removing a creature
+     *
+     * */
+    public void removeFromMap() {
+        simulation.getMap().getMap().get(getLocation().getY()).get(getLocation().getX()).removeCreature(this);
+    }
+
+    /**
+     * Now with Event Firing!!1!
+     *
+     */
+    public void moveToLocation(SimulationCoordinate c) {
+        SimulationCoordinate oldCoords = getLocation();
+        if (setLocation(c)) simulation.getEventManager().fireEvent(new CreatureMoveEvent(simulation.getMap().getMap(), this, oldCoords, c));
+
+    }
+
+    /**
+     * Stops thread
+     *
+     * */
+    public void setDead(boolean dead) {
+        isDead = dead;
     }
 }
