@@ -53,12 +53,15 @@ public class DisplayListener implements Listener {
 
                 Button button = new Button();
 
+                button.addKeyListener(new ControllerKeyListener());
+
                 simulationComponentMapping.get(i).put(j, new Pair<>(button, sim.getMap().getMap().get(i).get(j)));
                 frame.add(button);
             }
         }
 
         frame.addKeyListener(new ControllerKeyListener());
+
         frame.setSize(400, 500);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -105,7 +108,6 @@ public class DisplayListener implements Listener {
 
         @Override
         public void keyTyped(KeyEvent e) {
-            System.out.println(e.getKeyChar());
             if (e.getKeyChar() == 'o') simulationController.getFrame().setVisible(true);
         }
 
