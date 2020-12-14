@@ -49,10 +49,10 @@ public class SimulationController implements Listener {
 
 
 
-        frame.setSize(400, 500);
+        frame.setSize(400, 200);
         frame.setVisible(true);
         frame.setLayout(new FlowLayout());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
     }
 
     private class ButtonPauseListener implements ActionListener {
@@ -117,5 +117,9 @@ public class SimulationController implements Listener {
 
             sim.getCreaturesManager().getCreature(index).pause();
         }
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 }

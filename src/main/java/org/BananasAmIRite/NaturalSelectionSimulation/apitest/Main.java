@@ -14,17 +14,13 @@ public class Main extends NaturalSelection {
         simulation.getTraitManager().registerTrait(Speed.class);
 
         DisplayListener listener = new DisplayListener(simulation.getSizeX(), simulation.getSizeY(), simulation);
-        SimulationController simController = new SimulationController(simulation);
 
         getSimulation().getEventManager().registerEventListener(listener);
 
-        // creature of first creature
-        TraitsCreature c = new TraitsCreature(simulation, 0);
-        c.start();
-
-        // second creature cuz why not
-        TraitsCreature c2 = new TraitsCreature(simulation, 1);
-        c2.start();
+        for (int i = 0; i < 100; i++) {
+            TraitsCreature c = new TraitsCreature(simulation, i);
+            c.start();
+        }
 
         simulation.getCreaturesManager().returnAllHome();
     }
