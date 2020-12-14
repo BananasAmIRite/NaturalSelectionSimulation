@@ -1,6 +1,5 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -36,9 +35,7 @@ public class Tile {
 
     public static String translateTileToString(Tile t) {
         StringBuilder builder = new StringBuilder();
-        Iterator<Entity> iterator = t.creatures.iterator();
-        while (iterator.hasNext()) {
-            Entity creature = iterator.next();
+        for (Entity creature : t.creatures) {
             if (creature == null) continue;
             builder.append(creature.getEntityAbbreviation()).append(creature.getEntityID()).append("|");
         }
