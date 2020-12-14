@@ -34,11 +34,12 @@ public class Tile {
     }
 
     public static String translateTileToString(Tile t) {
-        StringBuilder builder = new StringBuilder();
-        for (Entity creature : t.creatures) {
+        String[] arr = new String[t.creatures.size()];
+        for (int i = 0; i < t.creatures.size(); i++) {
+            Entity creature = t.creatures.get(i);
             if (creature == null) continue;
-            builder.append(creature.getEntityAbbreviation()).append(creature.getEntityID()).append("|");
+            arr[i] = creature.getEntityAbbreviation() + creature.getEntityID();
         }
-        return builder.toString();
+        return String.join("|", arr);
     }
 }

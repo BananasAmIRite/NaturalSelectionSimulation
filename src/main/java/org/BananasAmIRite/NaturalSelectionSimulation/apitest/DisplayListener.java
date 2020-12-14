@@ -40,6 +40,8 @@ public class DisplayListener implements Listener {
         frame = new JFrame();
         frame.setLayout(new GridLayout(x, y));
 
+        frame.setTitle("Simulation");
+
         // initiate simulation component mapping
         simulationComponentMapping = new GenericArrayList<>(y);
 
@@ -85,11 +87,6 @@ public class DisplayListener implements Listener {
             for (int j = 0; j < tiles.size(); j++) {
                 Tile tile = tiles.get(j);
 
-//                System.out.println(tile);
-//
-//                System.out.println("COMPONENT");
-//                System.out.println(getComponentAt(j, i));
-//
                 ((Button) getComponentAt(j, i)).setLabel(Tile.translateTileToString(tile));
             }
         }
@@ -97,9 +94,9 @@ public class DisplayListener implements Listener {
 
     @EventHandler
     public void onCreatureMove(CreatureMoveEvent e) {
-        ((Button) getComponentAt(e.getFrom().getY(), e.getFrom().getX())).setLabel(Tile.translateTileToString(e.getMap().get(e.getFrom().getY()).get(e.getFrom().getX())));
+        ((Button) getComponentAt(e.getFrom().getX(), e.getFrom().getY())).setLabel(Tile.translateTileToString(e.getMap().get(e.getFrom().getY()).get(e.getFrom().getX())));
 
-        ((Button) getComponentAt(e.getTo().getY(), e.getTo().getX())).setLabel(Tile.translateTileToString(e.getMap().get(e.getTo().getY()).get(e.getTo().getX())));
+        ((Button) getComponentAt(e.getTo().getX(), e.getTo().getY())).setLabel(Tile.translateTileToString(e.getMap().get(e.getTo().getY()).get(e.getTo().getX())));
 
     }
 

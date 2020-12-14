@@ -3,7 +3,6 @@ package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.CreatureMoveEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
-import org.BananasAmIRite.NaturalSelectionSimulation.traits.EnergyTrait;
 import org.BananasAmIRite.NaturalSelectionSimulation.utils.CoordinateUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -35,14 +34,6 @@ public class Creature extends Thread implements Entity {
         simulation.getTraitManager().addToCreature(this);
         setHome(this.simulation.getCreaturesManager().generateHome());
         setLocation(this.getHome());  // on creation of creature, default location is home
-
-        // creature trait test
-        System.out.println("EnergyTrait Value: ");
-        System.out.println(getTraits().getTraitValue(EnergyTrait.class));
-        getTraits().setTrait(EnergyTrait.class, 10);
-        System.out.println(getTraits().getTraitValue(EnergyTrait.class));
-        getTraits().setTrait(EnergyTrait.class, -1);
-        System.out.println(getTraits().getTraitValue(EnergyTrait.class));
 
         simulation.getCreaturesManager().registerCreature(this);
     }
