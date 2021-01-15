@@ -1,29 +1,32 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Coordinate implements Comparable<Coordinate> {
     protected final int x;
     protected final int y;
 
-    public static final List<Direction> DIRECTIONS = List.of(Direction.values());
-
     public Coordinate(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public static Coordinate move(Coordinate originalCoords, Direction direction, int amount) {
+    public static Coordinate move(Coordinate originalCoords, int direction, int amount) {
         return switch (direction) {
             default -> originalCoords.add(0, -(amount));
-            case DOWN -> originalCoords.add(0, amount);
-            case LEFT -> originalCoords.add(-(amount), 0);
-            case RIGHT -> originalCoords.add(amount, 0);
+            case Direction.DOWN -> originalCoords.add(0, amount);
+            case Direction.LEFT -> originalCoords.add(-(amount), 0);
+            case Direction.RIGHT -> originalCoords.add(amount, 0);
         };
     }
 
-    public Coordinate move(Direction direction, int amount) {
+    public Coordinate move(int direction, int amount) {
         return move(this, direction, amount);
+    }
+
+    public Coordinate moveCoords(int x, int y) {
+        return new Coordinate(this.x + x, this.y + y);
     }
 
     public int getX() {
@@ -36,10 +39,7 @@ public class Coordinate implements Comparable<Coordinate> {
 
     @Override
     public String toString() {
-        return "Coordinate{" +
-                "x=" + x +
-                ", y=" + y +
-                '}';
+        return "Coordinate[" + x + ", " + y + ']';
     }
 
     @Override
@@ -63,10 +63,14 @@ public class Coordinate implements Comparable<Coordinate> {
         return new Coordinate(this.x + x, this.y + y);
     }
 
-    public enum Direction {
-        UP,
-        DOWN,
-        LEFT,
-        RIGHT
+    public static class Direction {
+        public final static int UP = 1;
+        public final static int DOWN = 2;
+        public final static int LEFT = 3;
+        public final static int RIGHT = 4;
+
+        public static List<Integer> getDirections() {
+            return Arrays.asList(UP, DOWN, LEFT, RIGHT);
+        }
     }
 }

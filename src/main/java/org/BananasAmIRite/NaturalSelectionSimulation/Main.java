@@ -1,11 +1,34 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
+import org.BananasAmIRite.NaturalSelectionSimulation.utils.NumberUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, URISyntaxException {
+        int SIMULATION_WIDTH = 10;
+        int SIMULATION_HEIGHT = 10;
 
-        Simulation sim = new Simulation(10, 10);
+        // argument processing :D
+        for (String arg : args) {
+            if (arg.startsWith("-sw")) {
+                SIMULATION_WIDTH = NumberUtils.isNumericInt(arg.replace("-sw", "")) ?
+                        Integer.parseInt(arg.replace("-sw", "")) :
+                        SIMULATION_WIDTH;
+            } else if (arg.startsWith("-sh")) {
+                SIMULATION_HEIGHT = NumberUtils.isNumericInt(arg.replace("-sh", "")) ?
+                        Integer.parseInt(arg.replace("-sh", "")) :
+                        SIMULATION_HEIGHT;
+            } else if (arg.equals("-runAnother")) { // just for funs and testing
+                Runtime.getRuntime().exec("java -jar " + new File(Main.class.getProtectionDomain().getCodeSource().getLocation()
+                        .toURI()).getPath() + " -sw" + SIMULATION_WIDTH + " -sh" + SIMULATION_HEIGHT);
+                System.exit(0);
+            }
+        }
 
-
+        Simulation sim = new Simulation(SIMULATION_WIDTH, SIMULATION_HEIGHT);
  
 
 //        System.out.println("Launching Test GUI...");

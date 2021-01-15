@@ -1,41 +1,42 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.CreatureMoveEvent;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.EntityRemoveEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
+import org.BananasAmIRite.NaturalSelectionSimulation.traits.EnergyTrait;
 import org.BananasAmIRite.NaturalSelectionSimulation.utils.CoordinateUtils;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Random;
+import java.util.List;
 
-public class Creature extends Thread implements Entity {
+public class Creature extends Entity implements Runnable {
     private final int id;
-    private final Simulation simulation;
     private SimulationCoordinate home;
-    private SimulationCoordinate location;
-    private final String abb = "c";
     private Traits traits;
+    private final int SENSING_RANGE = 10;
 
     // multithreading stuff
+    private final Thread thread;
     private final Object lock;
     private boolean waitQueue;
     private boolean isDead;
 
-    private final Random RANDOM;
+    private boolean isHome = false;
 
     public Creature(Simulation sim, int id) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        super(sim);
         this.id = id;
-        this.simulation = sim;
         this.traits = new Traits();
 
         this.lock = new Object();
-        this.RANDOM = new Random();
 
-        simulation.getTraitManager().addToCreature(this);
-        setHome(this.simulation.getCreaturesManager().generateHome());
+        this.sim.getTraitManager().addToCreature(this);
+        setHome(this.sim.getCreaturesManager().generateHome());
         setLocation(this.getHome());  // on creation of creature, default location is home
 
-        simulation.getCreaturesManager().registerCreature(this);
+        this.sim.getCreaturesManager().registerCreature(this);
+
+        thread = new Thread(this);
     }
 
     public SimulationCoordinate getHome() {
@@ -46,24 +47,17 @@ public class Creature extends Thread implements Entity {
         this.home = home;
     }
 
-    public int getEntityID() {
+    public final int getEntityID() {
         return id;
     }
 
     @Override
-    public String getEntityAbbreviation() {
-        return abb;
+    public final String getEntityAbbreviation() {
+        return "c";
     }
 
-    public SimulationCoordinate getLocation() {
-        return location;
-
-    }
-
-    public boolean setLocation(SimulationCoordinate location) {
-        if (!simulation.getMap().changeCreatureLocation(this, this.location, location)) return false;
-        this.location = location;
-
+    @Override
+    public boolean showEntityID() {
         return true;
     }
 
@@ -75,7 +69,7 @@ public class Creature extends Thread implements Entity {
     public String toString() {
         return "Creature{" +
                 "id=" + id +
-                ", simulation=" + simulation +
+                ", simulation=" + sim +
                 ", home=" + home +
                 ", location=" + location +
                 ", traits=" + traits +
@@ -129,14 +123,48 @@ public class Creature extends Thread implements Entity {
      *
      * */
     protected void doTasks() {
-        moveToLocation(getLocation().move(Coordinate.DIRECTIONS.get(RANDOM.nextInt(Coordinate.DIRECTIONS.size())), 1));
+        moveToLocation(getLocation().move(Coordinate.Direction.getDirections().get(sim.getMap().getMapRandom().nextInt(Coordinate.Direction.getDirections().size())), 1));
 
         // TODO: add energy system
         // TODO: setup food/home logic (energy > calcEnergyDistance(Coordinate coordToHome) ? food() : home())
 
+        int direction = traits.getTraitValue(EnergyTrait.class) > getEnergyDistance(getHome()) ? findFood() : goHome();
+
+        if (direction != 0) {
+            moveToLocation(getLocation().move(direction, 1));
+            traits.setTrait(EnergyTrait.class, traits.getTraitValue(EnergyTrait.class));
+        } else {
+            // pause creature and do stuff
+            isHome = true;
+            pause();
+        }
+
+
         // System.out.println(getTraits().getTrait(EnergyTrait.class));
 
         //  set energy
+    }
+
+    protected int goHome() {
+        return CoordinateUtils.pathfindNextDirection(getLocation(), getHome());
+    }
+
+    protected int getEnergyDistance(Coordinate coord) {
+        return coord.getX() + coord.getY();
+    }
+
+    protected int findFood() {
+        SimulationCoordinate co1 = getLocation().moveCoords(-(this.SENSING_RANGE), -(this.SENSING_RANGE));
+        SimulationCoordinate co2 = getLocation().moveCoords((this.SENSING_RANGE), (this.SENSING_RANGE));
+
+        List<Tile> t = Tile.getAllTilesBetween(co1, co2);
+
+        for (Tile tile : t) {
+            if (tile.hasEntity(Food.class)) {
+                CoordinateUtils.pathFind(getLocation(), tile.getCoords());
+            }
+        }
+        return Coordinate.Direction.getDirections().get(sim.getMap().getMapRandom().nextInt(Coordinate.Direction.getDirections().size())); // random direction
     }
 
     /**
@@ -170,17 +198,9 @@ public class Creature extends Thread implements Entity {
      *
      * */
     public void removeFromMap() {
-        simulation.getMap().getMap().get(getLocation().getY()).get(getLocation().getX()).removeCreature(this);
-    }
-
-    /**
-     * Now with Event Firing!!1!
-     *
-     */
-    public void moveToLocation(SimulationCoordinate c) {
-        SimulationCoordinate oldCoords = getLocation();
-        if (setLocation(c)) simulation.getEventManager().fireEvent(new CreatureMoveEvent(simulation.getMap().getMap(), this, oldCoords, c));
-
+        if (sim.getMap().getMap().get(getLocation().getY()).get(getLocation().getX()).removeEntity(this)) {
+            sim.getEventManager().fireEvent(new EntityRemoveEvent(sim.getMap().getMap(), this));
+        }
     }
 
     /**
@@ -189,5 +209,13 @@ public class Creature extends Thread implements Entity {
      * */
     public void setDead(boolean dead) {
         isDead = dead;
+    }
+
+    public Thread getThread() {
+        return thread;
+    }
+
+    public boolean isHome() {
+        return isHome;
     }
 }

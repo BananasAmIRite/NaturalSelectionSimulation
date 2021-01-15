@@ -34,7 +34,7 @@ public class Traits {
         return null;
     }
 
-    public void setTrait(Class<? extends Trait> trait, int value) {
+    public void setTrait(Class<? extends Trait> trait, double value) {
         Trait t = getTrait(trait);
 
         if (t == null) return;

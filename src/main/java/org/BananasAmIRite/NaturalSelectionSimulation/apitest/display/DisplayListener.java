@@ -1,9 +1,9 @@
-package org.BananasAmIRite.NaturalSelectionSimulation.apitest;
+package org.BananasAmIRite.NaturalSelectionSimulation.apitest.display;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.Listener;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.annotations.EventHandler;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.CreatureMoveEvent;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.EntityMoveEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationUpdateEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.GenericArrayList;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Pair;
@@ -23,6 +23,7 @@ public class DisplayListener implements Listener {
     private int y;
     private Simulation sim;
     private SimulationController simulationController;
+    private ConsoleWindow consoleWindow;
 
     public DisplayListener(int x, int y, Simulation sim) {
 
@@ -34,6 +35,8 @@ public class DisplayListener implements Listener {
 
 
         this.simulationController = new SimulationController(sim);
+        this.consoleWindow = new ConsoleWindow();
+        System.out.println("TEST!");
     }
 
     private void initFrame(int x, int y) {
@@ -64,7 +67,7 @@ public class DisplayListener implements Listener {
 
         frame.addKeyListener(new ControllerKeyListener());
 
-        frame.setSize(400, 500);
+        frame.setSize(500, 500);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
@@ -81,7 +84,7 @@ public class DisplayListener implements Listener {
 
     @EventHandler
     public void onMapUpdate(SimulationUpdateEvent e) {
-        if (e instanceof CreatureMoveEvent) return; // leave for separate handler
+        if (e instanceof EntityMoveEvent) return; // leave for separate handler
         for (int i = 0; i < e.getMap().size(); i++) {
             List<Tile> tiles = e.getMap().get(i);
             for (int j = 0; j < tiles.size(); j++) {
@@ -93,7 +96,7 @@ public class DisplayListener implements Listener {
     }
 
     @EventHandler
-    public void onCreatureMove(CreatureMoveEvent e) {
+    public void onCreatureMove(EntityMoveEvent e) {
         ((Button) getComponentAt(e.getFrom().getX(), e.getFrom().getY())).setLabel(Tile.translateTileToString(e.getMap().get(e.getFrom().getY()).get(e.getFrom().getX())));
 
         ((Button) getComponentAt(e.getTo().getX(), e.getTo().getY())).setLabel(Tile.translateTileToString(e.getMap().get(e.getTo().getY()).get(e.getTo().getX())));
@@ -105,7 +108,8 @@ public class DisplayListener implements Listener {
 
         @Override
         public void keyTyped(KeyEvent e) {
-            if (e.getKeyChar() == 'o') simulationController.getFrame().setVisible(true);
+            if (e.getKeyChar() == 'o') simulationController.setVisible(true);
+            if (e.getKeyChar() == 'i') consoleWindow.setVisible(true);
         }
 
         @Override

@@ -23,4 +23,18 @@ public class CoordinateUtils {
     public static boolean isCoordinatesSafe(SimulationCoordinate coords) {
         return coords.getX() >= 0 && (coords.getX() <= coords.getSimulation().getSizeX() - 1) && coords.getY() >= 0 && (coords.getY() <= coords.getSimulation().getSizeY() - 1);
     }
+
+    public static int pathfindNextDirection(Coordinate loc1, Coordinate loc2) {
+        Coordinate c = pathFind(loc1, loc2);
+        if (c.getX() != 0) {
+            if (c.getX() > 0) {
+                return Coordinate.Direction.RIGHT;
+            } else return Coordinate.Direction.LEFT;
+        } else if (c.getY() != 0) {
+            if (c.getY() > 0) {
+                return Coordinate.Direction.DOWN;
+            } else return Coordinate.Direction.UP;
+        }
+        return 0; // no direction (same location so dont need to go anywhere)
+    }
 }

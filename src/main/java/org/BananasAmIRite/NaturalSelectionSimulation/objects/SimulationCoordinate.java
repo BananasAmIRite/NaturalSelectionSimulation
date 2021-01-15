@@ -1,6 +1,7 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
+import org.BananasAmIRite.NaturalSelectionSimulation.utils.NumberUtils;
 
 public class SimulationCoordinate extends Coordinate {
     private final Simulation simulation;
@@ -31,9 +32,41 @@ public class SimulationCoordinate extends Coordinate {
     }
 
     @Override
-    public SimulationCoordinate move(Direction direction, int amount) {
+    public SimulationCoordinate move(int direction, int amount) {
         Coordinate coord = move(this, direction, amount);
 
         return asSimulationCoord(coord, getSimulation());
+    }
+
+    @Override
+    public SimulationCoordinate moveCoords(int x, int y) {
+        return new SimulationCoordinate(this.simulation, this.x + x, this.y + y);
+    }
+
+    /**
+     * Generates a random coordinate within the simulation bounds
+     *
+     * */
+    public static SimulationCoordinate randomCoordinate(Simulation sim) {
+        return new SimulationCoordinate(sim,
+                NumberUtils.randInt(0, sim.getSizeX()),
+                NumberUtils.randInt(0, sim.getSizeY())
+        );
+    }
+
+    /**
+     * Generates a random coordinate within the specified bounds
+     *
+     * */
+    public static SimulationCoordinate randomCoordinate(Simulation sim, int xBL, int xBH, int hBL, int hBH) {
+        return new SimulationCoordinate(sim,
+                NumberUtils.randInt(Math.max(xBL, 0), Math.min(sim.getSizeX(), xBH)),
+                NumberUtils.randInt(Math.max(hBL, 0), Math.min(sim.getSizeY(), hBH))
+        );
+    }
+
+    @Override
+    public String toString() {
+        return "SimulationCoordinate[" + x + ", " + y + "]";
     }
 }

@@ -1,14 +1,12 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.objects.Coordinate;
-import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
-import org.BananasAmIRite.NaturalSelectionSimulation.objects.SimulationCoordinate;
-import org.BananasAmIRite.NaturalSelectionSimulation.objects.Tile;
+import org.BananasAmIRite.NaturalSelectionSimulation.objects.*;
 import org.BananasAmIRite.NaturalSelectionSimulation.utils.CoordinateUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 public class SimulationMap {
@@ -17,11 +15,13 @@ public class SimulationMap {
     private final Simulation sim;
     private List<List<Tile>> map = new ArrayList<>();
     private List<SimulationCoordinate> sideCoords = new ArrayList<>();
+    private Random mapRandom;
 
     public SimulationMap(Simulation sim, int rows, int columns) {
         this.rows = rows;
         this.cols = columns;
         this.sim = sim;
+        this.mapRandom = new Random();
         try {
             generateMap(rows, columns);
         } catch (Exception e) {
@@ -57,7 +57,7 @@ public class SimulationMap {
     /**
      * @return if the creature was successfully moved
      */
-    public boolean changeCreatureLocation(Creature creature, Coordinate before, Coordinate after) {
+    public boolean changeEntityLocation(Entity entity, Coordinate before, Coordinate after) {
         if (after.getX() >= cols || after.getY() >= rows) {
             return false;
         }
@@ -69,13 +69,13 @@ public class SimulationMap {
         List<List<Tile>> backupMap = map; // restore if something goes wrong
 
         if (before != null) {
-            if (!map.get(before.getY()).get(before.getX()).removeCreature(creature)) {
+            if (!map.get(before.getY()).get(before.getX()).removeEntity(entity)) {
                 map = backupMap;
                 return false;
             }
         }
 
-        if (!map.get(after.getY()).get(after.getX()).addCreature(creature)) {
+        if (!map.get(after.getY()).get(after.getX()).addEntity(entity)) {
             map = backupMap;
             return false;
         }
@@ -121,5 +121,9 @@ public class SimulationMap {
 
     public void setCols(int cols) {
         this.cols = cols;
+    }
+
+    public Random getMapRandom() {
+        return mapRandom;
     }
 }

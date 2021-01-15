@@ -16,8 +16,8 @@ public class Simulation {
     private final APIManager apiManager;
     private boolean isFirstStarted;
     private Class<? extends Creature> creatureClass = Creature.class;
-    private int sizeX;
-    private int sizeY;
+    private final int sizeX;
+    private final int sizeY;
 
     public Simulation(int x, int y)  {
         eventManager = new EventManager();
