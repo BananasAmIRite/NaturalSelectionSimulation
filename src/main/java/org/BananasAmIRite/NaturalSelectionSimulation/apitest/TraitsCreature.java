@@ -13,7 +13,7 @@ public class TraitsCreature extends Creature {
     public TraitsCreature(Simulation sim, int id) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         super(sim, id);
 
-        waitTime = (long) NumberUtils.randDouble(1, 5, this.sim.getMap().getMapRandom());
+        waitTime = (long) NumberUtils.randDouble(1, 2, this.sim.getMap().getMapRandom());
     }
 
     @Override

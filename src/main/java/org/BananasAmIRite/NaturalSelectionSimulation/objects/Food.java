@@ -15,7 +15,7 @@ public class Food extends Entity {
     public Food(Simulation sim) {
         super(sim);
 
-        setLocationNew(SimulationCoordinate.randomCoordinate(sim, 1, sim.getSizeX() - 1, 1, sim.getSizeY() - 1));
+        setLocationNew(SimulationCoordinate.randomCoordinate(sim, 1,  sim.getSizeX() - 1, 1, sim.getSizeY() - 1));
 
         id = FOOD_ID;
         FOOD_ID++;

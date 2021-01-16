@@ -19,7 +19,7 @@ public class Main extends NaturalSelection {
 
         getSimulation().getEventManager().registerEventListener(listener);
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1; i++) {
             TraitsCreature c = new TraitsCreature(simulation, i);
             c.getThread().start();
         }

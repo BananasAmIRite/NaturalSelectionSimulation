@@ -19,10 +19,7 @@ public class Pair<T, V> {
 
     @Override
     public String toString() {
-        return "Pair{" +
-                "key=" + key +
-                ", value=" + value +
-                '}';
+        return "Pair[" + key + ", " + value + ']';
     }
 
     @Override

@@ -42,7 +42,7 @@ public class SimulationMap {
             List<T> l = new ArrayList<>();
 
             for (int j = 0; j < columns; j++) {
-                l.add(clazz.getDeclaredConstructor(SimulationCoordinate.class).newInstance(new SimulationCoordinate(sim, i, j)));
+                l.add(clazz.getDeclaredConstructor(SimulationCoordinate.class).newInstance(new SimulationCoordinate(sim, j, i)));
             }
 
             map.add(l);
@@ -74,6 +74,7 @@ public class SimulationMap {
                 return false;
             }
         }
+
 
         if (!map.get(after.getY()).get(after.getX()).addEntity(entity)) {
             map = backupMap;

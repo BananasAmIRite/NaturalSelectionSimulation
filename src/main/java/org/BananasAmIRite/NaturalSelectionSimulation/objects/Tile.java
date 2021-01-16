@@ -28,6 +28,20 @@ public class Tile {
         return true;
     }
 
+    public boolean hasEntity(Class<? extends Entity> clazz) {
+        for (Entity entity : entities) {
+            if (entity.getClass() == clazz) return true;
+        }
+        return false;
+    }
+
+    public Entity getEntity(Class<? extends Entity> clazz) {
+        for (Entity entity : entities) {
+            if (entity.getClass() == clazz) return entity;
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         return "Tile{" +
@@ -63,13 +77,6 @@ public class Tile {
             }
         }
         return t;
-    }
-
-    public boolean hasEntity(Class<? extends Entity> clazz) {
-        for (Entity entity : entities) {
-            if (entity.getClass() == clazz) return true;
-        }
-        return false;
     }
 
     public SimulationCoordinate getCoords() {

@@ -41,7 +41,7 @@ public abstract class Entity {
 
     /**
      * Sets the current location of the entity
-     * NOTE: This does not fire an {@link EntityMoveEvent}, please refer to {@link this#moveToLocation(SimulationCoordinate)} for one that fires an event
+     * NOTE: This does not fire an {@link EntityMoveEvent}, please refer to {@link Food#moveToLocation(SimulationCoordinate)} for one that fires an event
      *
      * */
     public final boolean setLocation(SimulationCoordinate location) {

@@ -13,7 +13,8 @@ public class Creature extends Entity implements Runnable {
     private final int id;
     private SimulationCoordinate home;
     private Traits traits;
-    private final int SENSING_RANGE = 10;
+    private final int SENSING_RANGE = 1;
+    private int foodCount = 0;
 
     // multithreading stuff
     private final Thread thread;
@@ -133,11 +134,11 @@ public class Creature extends Entity implements Runnable {
             return;
         }
 
-        int direction = traits.getTraitValue(EnergyTrait.class) > getEnergyDistance(getHome()) ? findFood() : goHome();
+        int direction = (getEnergyDistance(CoordinateUtils.pathFind(getLocation(), getHome())) >= traits.getTraitValue(EnergyTrait.class) && foodCount >= 1 /*req of 1 food count :D*/) ? goHome() : findFood();
 
         if (direction != 0) {
             moveToLocation(getLocation().move(direction, 1));
-            traits.setTrait(EnergyTrait.class, traits.getTraitValue(EnergyTrait.class));
+            traits.setTrait(EnergyTrait.class, traits.getTraitValue(EnergyTrait.class) - getEnergyPerStep());
         } else {
             // pause creature and do stuff
             isHome = true;
@@ -145,9 +146,13 @@ public class Creature extends Entity implements Runnable {
         }
 
 
-        // System.out.println(getTraits().getTrait(EnergyTrait.class));
+        Food f = (Food) sim.getMap().getMap().get(getLocation().getY()).get(getLocation().getX()).getEntity(Food.class);
 
-        //  set energy
+        if (f != null) {
+            sim.getMap().getMap().get(getLocation().getY()).get(getLocation().getX()).removeEntity(f);
+            sim.getEventManager().fireEvent(new EntityRemoveEvent(sim.getMap().getMap(), f));
+            this.foodCount++;
+        }
     }
 
     protected int goHome() {
@@ -155,48 +160,62 @@ public class Creature extends Entity implements Runnable {
     }
 
     protected int getEnergyDistance(Coordinate coord) {
-        return coord.getX() + coord.getY();
+        return ((Math.abs(coord.getX()) + Math.abs(coord.getY())) * getEnergyPerStep()) + getEnergyPerStep()/*cuz without, creature would have to make last step towards home or fail getting home*/;
+    }
+
+    protected int getEnergyPerStep() {
+        return 10;
     }
 
     protected int findFood() {
+
         SimulationCoordinate co1 = getLocation().add(-(this.SENSING_RANGE), -(this.SENSING_RANGE));
         SimulationCoordinate co2 = getLocation().add((this.SENSING_RANGE), (this.SENSING_RANGE));
 
         List<Tile> t = Tile.getAllTilesBetween(co1, co2);
 
+        Pair<Tile, Coordinate> lowestDist = null;
+
         for (Tile tile : t) {
             if (tile.hasEntity(Food.class)) {
-                CoordinateUtils.pathFind(getLocation(), tile.getCoords());
+                Coordinate pf = CoordinateUtils.pathFind(getLocation(), tile.getCoords());
+
+                if (lowestDist == null || (Math.abs(pf.getX()) + Math.abs(pf.getY()) < Math.abs(lowestDist.getValue().getX()) + Math.abs(lowestDist.getValue().getY()) && Math.abs(pf.getX()) + Math.abs(pf.getY()) > 0)) {
+                    lowestDist = new Pair<>(tile, pf);
+                }
             }
         }
+
+        if (lowestDist != null) {
+            int c = CoordinateUtils.pathfindNextDirection(getLocation(), lowestDist.getKey().getCoords());
+            if (c != 0) return c;
+        }
+
+        System.out.println("findFood.Random");
         return Coordinate.Direction.getDirections().get(sim.getMap().getMapRandom().nextInt(Coordinate.Direction.getDirections().size())); // random direction
     }
 
-    /**
-     * Finds home, then goes one step towards it
-     *
-     * Moves x first, then y
-     *
-     * @return if creature is already at home
-     * */
-    protected boolean searchHome() {
-        Coordinate coordsToHome = getToHome();
-
-        if (coordsToHome.getX() != 0) {
-            moveToLocation(getLocation().add((coordsToHome.getX() > 0 ? 1 : -1),0));
-            return false;
-        }
-        if (coordsToHome.getY() != 0) {
-            moveToLocation(getLocation().add(0,(coordsToHome.getY() > 0 ? 1 : -1)));
-            return false;
-        }
-        // otherwise at home
-        return true;
-    }
-
-    public Coordinate getToHome() {
-        return CoordinateUtils.pathFind(getLocation(), getHome());
-    }
+//    /**
+//     * Finds home, then goes one step towards it
+//     *
+//     * Moves x first, then y
+//     *
+//     * @return if creature is already at home
+//     * */
+//    protected boolean searchHome() {
+//        Coordinate coordsToHome = getToHome();
+//
+//        if (coordsToHome.getX() != 0) {
+//            moveToLocation(getLocation().add((coordsToHome.getX() > 0 ? 1 : -1),0));
+//            return false;
+//        }
+//        if (coordsToHome.getY() != 0) {
+//            moveToLocation(getLocation().add(0,(coordsToHome.getY() > 0 ? 1 : -1)));
+//            return false;
+//        }
+//        // otherwise at home
+//        return true;
+//    }
 
     /**
      * Should ONLY be used when removing a creature
