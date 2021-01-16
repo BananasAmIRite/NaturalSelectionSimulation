@@ -20,6 +20,7 @@ public class SimulationCoordinate extends Coordinate {
         if (coords.getY() < 0) coords = new SimulationCoordinate(this.simulation, coords.getX(), 0);
         if (coords.getY() > simulation.getSizeY() - 1)
             coords = new SimulationCoordinate(this.simulation, coords.getX(), simulation.getSizeY() - 1);
+
         return coords;
     }
 
@@ -36,11 +37,6 @@ public class SimulationCoordinate extends Coordinate {
         Coordinate coord = move(this, direction, amount);
 
         return asSimulationCoord(coord, getSimulation());
-    }
-
-    @Override
-    public SimulationCoordinate moveCoords(int x, int y) {
-        return new SimulationCoordinate(this.simulation, this.x + x, this.y + y);
     }
 
     /**

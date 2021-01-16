@@ -1,6 +1,7 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.EntityAddEvent;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.EntityRemoveEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.SimulationCoordinate;
 
@@ -27,14 +28,14 @@ public class CreaturesManager {
     public void deregisterCreature(int id) {
         if (creatures.get(id) == null) return;
         creatures.get(id).removeFromMap();
-        sim.getEventManager().fireEvent(new EntityAddEvent(sim.getMap().getMap(), creatures.get(id)));
+        sim.getEventManager().fireEvent(new EntityRemoveEvent(sim.getMap().getMap(), creatures.get(id)));
         creatures.remove(id);
     }
 
     public void deregisterCreature(Creature creature) {
         creatures.remove(creature.getEntityID());
         creature.removeFromMap();
-        sim.getEventManager().fireEvent(new EntityAddEvent(sim.getMap().getMap(), creature));
+        sim.getEventManager().fireEvent(new EntityRemoveEvent(sim.getMap().getMap(), creature));
     }
 
     public void incrementLatestID() {

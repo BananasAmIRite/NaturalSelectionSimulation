@@ -135,21 +135,17 @@ public class SimulationController extends JFrame implements Listener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("a");
             try {
                 int test = Integer.parseInt(field.getText());
             } catch (NumberFormatException ignored) {
                 return;
             }
 
-            System.out.println("b");
-
             int index = Integer.parseInt(field.getText());
 
             if (sim.getCreaturesManager().getCreature(index) == null) return;
 
             sim.getCreaturesManager().getCreature(index).setDead(true);
-            sim.getCreaturesManager().getCreature(index).removeFromMap();
         }
     }
 }

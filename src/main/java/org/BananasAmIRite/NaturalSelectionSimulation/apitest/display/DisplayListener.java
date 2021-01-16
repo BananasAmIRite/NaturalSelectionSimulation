@@ -36,7 +36,6 @@ public class DisplayListener implements Listener {
 
         this.simulationController = new SimulationController(sim);
         this.consoleWindow = new ConsoleWindow();
-        System.out.println("TEST!");
     }
 
     private void initFrame(int x, int y) {

@@ -25,10 +25,6 @@ public class Coordinate implements Comparable<Coordinate> {
         return move(this, direction, amount);
     }
 
-    public Coordinate moveCoords(int x, int y) {
-        return new Coordinate(this.x + x, this.y + y);
-    }
-
     public int getX() {
         return x;
     }

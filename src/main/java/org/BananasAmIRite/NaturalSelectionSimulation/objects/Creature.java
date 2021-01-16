@@ -123,10 +123,15 @@ public class Creature extends Entity implements Runnable {
      *
      * */
     protected void doTasks() {
-        moveToLocation(getLocation().move(Coordinate.Direction.getDirections().get(sim.getMap().getMapRandom().nextInt(Coordinate.Direction.getDirections().size())), 1));
 
         // TODO: add energy system
         // TODO: setup food/home logic (energy > calcEnergyDistance(Coordinate coordToHome) ? food() : home())
+
+        if (traits.getTraitValue(EnergyTrait.class) <= 0) {
+            setDead(true);
+            removeFromMap();
+            return;
+        }
 
         int direction = traits.getTraitValue(EnergyTrait.class) > getEnergyDistance(getHome()) ? findFood() : goHome();
 
@@ -154,8 +159,8 @@ public class Creature extends Entity implements Runnable {
     }
 
     protected int findFood() {
-        SimulationCoordinate co1 = getLocation().moveCoords(-(this.SENSING_RANGE), -(this.SENSING_RANGE));
-        SimulationCoordinate co2 = getLocation().moveCoords((this.SENSING_RANGE), (this.SENSING_RANGE));
+        SimulationCoordinate co1 = getLocation().add(-(this.SENSING_RANGE), -(this.SENSING_RANGE));
+        SimulationCoordinate co2 = getLocation().add((this.SENSING_RANGE), (this.SENSING_RANGE));
 
         List<Tile> t = Tile.getAllTilesBetween(co1, co2);
 
@@ -209,6 +214,9 @@ public class Creature extends Entity implements Runnable {
      * */
     public void setDead(boolean dead) {
         isDead = dead;
+        if (dead) {
+            sim.getCreaturesManager().deregisterCreature(this.id);
+        }
     }
 
     public Thread getThread() {

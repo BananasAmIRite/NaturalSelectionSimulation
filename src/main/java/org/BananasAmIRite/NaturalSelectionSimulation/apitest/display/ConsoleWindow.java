@@ -14,7 +14,7 @@ public class ConsoleWindow extends JFrame {
         consoleStream = new ConsoleStream();
 
         DefaultCaret caret = (DefaultCaret)consoleStream.getTextArea().getCaret();
-        caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
+        // caret.setUpdatePolicy(DefaultCaret.ALWAYS_UPDATE);
 
         add(new JScrollPane(consoleStream.getTextArea(), JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED));
 
