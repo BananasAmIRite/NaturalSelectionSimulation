@@ -10,8 +10,8 @@ public class TraitsCreature extends Creature {
 
     private long waitTime;
 
-    public TraitsCreature(Simulation sim, int id) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
-        super(sim, id);
+    public TraitsCreature(Simulation sim) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        super(sim);
 
         waitTime = (long) NumberUtils.randDouble(1, 2, this.sim.getMap().getMapRandom());
     }

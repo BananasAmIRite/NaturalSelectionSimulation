@@ -2,7 +2,7 @@ package org.BananasAmIRite.NaturalSelectionSimulation.api;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 
-public abstract class NaturalSelection implements APIBase {
+public abstract class NaturalSelection extends Thread implements APIBase {
 
     private final Simulation simulation;
 
@@ -11,22 +11,24 @@ public abstract class NaturalSelection implements APIBase {
     }
 
     @Override
-    public final void run() {
-
+    public final void runGeneration(int creatures, int foods) {
+        runGeneration(creatures, foods, 1);
     }
 
     @Override
-    public final void run(int generations) {
-
-    }
-
-    @Override
-    public final void run(int generations, int timeout) {
-
+    public final void runGeneration(int creatures, int foods, int generations) {
+        simulation.getGenerationManager().startGeneration(creatures, foods, generations);
     }
 
     @Override
     public final Simulation getSimulation() {
         return simulation;
+    }
+
+    @Override
+    public String toString() {
+        return "NaturalSelection{" +
+                "simulation=" + simulation +
+                '}';
     }
 }

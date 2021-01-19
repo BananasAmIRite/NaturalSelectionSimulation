@@ -2,6 +2,7 @@ package org.BananasAmIRite.NaturalSelectionSimulation.objects;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.EntityRemoveEvent;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Trait;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
 import org.BananasAmIRite.NaturalSelectionSimulation.traits.EnergyTrait;
 import org.BananasAmIRite.NaturalSelectionSimulation.utils.CoordinateUtils;
@@ -24,9 +25,13 @@ public class Creature extends Entity implements Runnable {
 
     private boolean isHome = false;
 
-    public Creature(Simulation sim, int id) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    private static int CURRENT_ID = 0;
+
+    public Creature(Simulation sim) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         super(sim);
-        this.id = id;
+        this.id = CURRENT_ID;
+        CURRENT_ID++;
+
         this.traits = new Traits();
 
         this.lock = new Object();
@@ -37,7 +42,12 @@ public class Creature extends Entity implements Runnable {
 
         this.sim.getCreaturesManager().registerCreature(this);
 
-        thread = new Thread(this);
+        thread = new Thread(this, "Creature-" + this.id);
+    }
+
+    public Creature(Simulation sim, Traits traits) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        this(sim);
+        this.traits = traits;
     }
 
     public SimulationCoordinate getHome() {
@@ -124,10 +134,6 @@ public class Creature extends Entity implements Runnable {
      *
      * */
     protected void doTasks() {
-
-        // TODO: add energy system
-        // TODO: setup food/home logic (energy > calcEnergyDistance(Coordinate coordToHome) ? food() : home())
-
         if (traits.getTraitValue(EnergyTrait.class) <= 0) {
             setDead(true);
             removeFromMap();
@@ -135,13 +141,12 @@ public class Creature extends Entity implements Runnable {
         }
 
         int direction = (getEnergyDistance(CoordinateUtils.pathFind(getLocation(), getHome())) >= traits.getTraitValue(EnergyTrait.class) && foodCount >= 1 /*req of 1 food count :D*/) ? goHome() : findFood();
-
         if (direction != 0) {
             moveToLocation(getLocation().move(direction, 1));
             traits.setTrait(EnergyTrait.class, traits.getTraitValue(EnergyTrait.class) - getEnergyPerStep());
         } else {
             // pause creature and do stuff
-            isHome = true;
+            setHome(true);
             pause();
         }
 
@@ -149,8 +154,7 @@ public class Creature extends Entity implements Runnable {
         Food f = (Food) sim.getMap().getMap().get(getLocation().getY()).get(getLocation().getX()).getEntity(Food.class);
 
         if (f != null) {
-            sim.getMap().getMap().get(getLocation().getY()).get(getLocation().getX()).removeEntity(f);
-            sim.getEventManager().fireEvent(new EntityRemoveEvent(sim.getMap().getMap(), f));
+            f.remove();
             this.foodCount++;
         }
     }
@@ -160,7 +164,7 @@ public class Creature extends Entity implements Runnable {
     }
 
     protected int getEnergyDistance(Coordinate coord) {
-        return ((Math.abs(coord.getX()) + Math.abs(coord.getY())) * getEnergyPerStep()) + getEnergyPerStep()/*cuz without, creature would have to make last step towards home or fail getting home*/;
+        return ((Math.abs(coord.getX()) + Math.abs(coord.getY())) * getEnergyPerStep()) + (2 * getEnergyPerStep())/*cuz without, creature would have to make last step towards home or fail getting home*/;
     }
 
     protected int getEnergyPerStep() {
@@ -191,7 +195,6 @@ public class Creature extends Entity implements Runnable {
             if (c != 0) return c;
         }
 
-        System.out.println("findFood.Random");
         return Coordinate.Direction.getDirections().get(sim.getMap().getMapRandom().nextInt(Coordinate.Direction.getDirections().size())); // random direction
     }
 
@@ -235,6 +238,7 @@ public class Creature extends Entity implements Runnable {
         isDead = dead;
         if (dead) {
             sim.getCreaturesManager().deregisterCreature(this.id);
+            if (isAllFinished()) sim.getGenerationManager().unlock();
         }
     }
 
@@ -244,5 +248,46 @@ public class Creature extends Entity implements Runnable {
 
     public boolean isHome() {
         return isHome;
+    }
+
+    /**
+     * reset creature values in prereparation for next generation
+     *
+     * */
+    public final void resetGeneration() {
+        moveToLocation(getHome()); // go home in case theyre not home
+        setHome(false);
+        this.foodCount = 0; //
+        getTraits().setTrait(EnergyTrait.class, getTraits().getTrait(EnergyTrait.class).getDefaultValue()); // set to default value
+    }
+
+    private void setHome(boolean home) {
+        this.isHome = home;
+        if (home) {
+            if (isAllFinished()) sim.getGenerationManager().unlock();
+        }
+    }
+
+    public void onGenerationFinish() throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        if (foodCount >= 2) {
+            // copies traits to new creature and mutates them
+            Traits t = new Traits(this.traits);
+            for (Trait trait : t.getTraits()) {
+                t.setTrait(trait.getClass(), trait.creatureReproduce(trait.getValue()));
+            }
+            System.out.println("Created new creature with traits, " + t.toString());
+            new Creature(sim,t);
+        }
+    }
+
+    private boolean isAllFinished() {
+        boolean isAllFinished = true;
+        for (Creature creature : sim.getCreaturesManager().getCreatures()) {
+            if (!creature.isHome()) {
+                isAllFinished = false;
+                break;
+            }
+        }
+        return isAllFinished;
     }
 }

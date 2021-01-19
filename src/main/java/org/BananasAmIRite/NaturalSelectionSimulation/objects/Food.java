@@ -18,6 +18,9 @@ public class Food extends Entity {
         setLocationNew(SimulationCoordinate.randomCoordinate(sim, 1,  sim.getSizeX() - 1, 1, sim.getSizeY() - 1));
 
         id = FOOD_ID;
+
+        sim.getFoodManager().registerFood(this);
+
         FOOD_ID++;
     }
 
@@ -34,5 +37,10 @@ public class Food extends Entity {
     @Override
     public boolean showEntityID() {
         return false;
+    }
+
+    public void remove() {
+        sim.getMap().getMap().get(getLocation().getY()).get(getLocation().getX()).removeEntity(this);
+        sim.getFoodManager().deregisterFood(getEntityID());
     }
 }

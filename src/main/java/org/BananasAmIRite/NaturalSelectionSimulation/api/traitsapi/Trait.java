@@ -78,4 +78,9 @@ public abstract class Trait implements TraitBase {
      *
      * */
     protected abstract void setValues();
+
+    @Override
+    public String toString() {
+        return "Trait:" + ID + "{" + defaultValue + '}';
+    }
 }

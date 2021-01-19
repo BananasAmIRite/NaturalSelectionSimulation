@@ -1,6 +1,5 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Entity;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Tile;
 
@@ -15,7 +14,7 @@ public class EntityRemoveEvent extends SimulationUpdateEvent {
         this.entity = entity;
     }
 
-    public Entity getCreature() {
+    public Entity getEntity() {
         return entity;
     }
 }

@@ -9,25 +9,16 @@ import org.BananasAmIRite.NaturalSelectionSimulation.objects.Food;
 import java.lang.reflect.InvocationTargetException;
 
 public class Main extends NaturalSelection {
-    public Main(Simulation simulation) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
+    public Main(Simulation simulation) {
         super(simulation);
-        System.out.println("API Class Initialized");
         simulation.setCreatureClass(TraitsCreature.class);
         simulation.getTraitManager().registerTrait(Speed.class);
-
         DisplayListener listener = new DisplayListener(simulation.getSizeX(), simulation.getSizeY(), simulation);
-
         getSimulation().getEventManager().registerEventListener(listener);
+    }
 
-        for (int i = 0; i < 1; i++) {
-            TraitsCreature c = new TraitsCreature(simulation, i);
-            c.getThread().start();
-        }
-
-        for (int i = 0; i < 10;  i++) {
-            Food f = new Food(simulation);
-        }
-
-        simulation.getCreaturesManager().returnAllHome();
+    @Override
+    public void run() {
+        runGeneration(10, 10, 2);
     }
 }

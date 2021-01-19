@@ -52,10 +52,12 @@ public class APIManager {
         if (!NaturalSelection.class.isAssignableFrom(c))
             throw new ClassUnassignableException("The provided main class, " + c.toString() + ", must be a subclass of the class, " + NaturalSelection.class.toString() + "!");
 
-//        c.getSuperclass().getConstructor(Simulation.class);
+        Class<? extends NaturalSelection> cl = c.asSubclass(NaturalSelection.class);
 
-        Constructor<?> constructor = c.getConstructor(Simulation.class); // guaranteed existence
+        Constructor<? extends NaturalSelection> constructor = cl.getConstructor(Simulation.class); // guaranteed existence
 
-        constructor.newInstance(this.simulation);
+        NaturalSelection api = constructor.newInstance(this.simulation);
+
+         api.start();
     }
 }

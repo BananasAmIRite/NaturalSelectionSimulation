@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Traits {
-    private final List<Trait> data = new ArrayList<>();
+    private final List<Trait> data;
 
     public Traits() {
+        data = new ArrayList<>();
+    }
 
+    public Traits(Traits traits) {
+        data = new ArrayList<>(traits.getTraits());
     }
 
     public void addTrait(Class<? extends Trait> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
@@ -40,5 +44,10 @@ public class Traits {
         if (t == null) return;
 
         if (t.isSettable(value)) t.setValue(value);
+    }
+
+    @Override
+    public String toString() {
+        return "Traits" + data;
     }
 }

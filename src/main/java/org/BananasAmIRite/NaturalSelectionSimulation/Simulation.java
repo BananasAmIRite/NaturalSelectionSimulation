@@ -14,6 +14,8 @@ public class Simulation {
     private final CreaturesListener cListener;
     private final TraitManager traitManager;
     private final APIManager apiManager;
+    private final GenerationManager generationManager;
+    private final FoodManager foodManager;
     private boolean isFirstStarted;
     private Class<? extends Creature> creatureClass = Creature.class;
     private final int sizeX;
@@ -25,9 +27,11 @@ public class Simulation {
         this.sizeY = y;
         map = new SimulationMap(this, x, y);
         creaturesManager = new CreaturesManager(this);
+        foodManager = new FoodManager(this);
         cListener = new CreaturesListener(this);
         traitManager = new TraitManager(this);
         apiManager = new APIManager(this);
+        generationManager = new GenerationManager(this);
         getEventManager().registerEventListener(cListener);
 
         registerNativeAPIUsages();
@@ -57,6 +61,10 @@ public class Simulation {
         return creaturesManager;
     }
 
+    public FoodManager getFoodManager() {
+        return foodManager;
+    }
+
     public CreaturesListener getcListener() {
         return cListener;
     }
@@ -71,6 +79,10 @@ public class Simulation {
 
     public TraitManager getTraitManager() {
         return traitManager;
+    }
+
+    public GenerationManager getGenerationManager() {
+        return generationManager;
     }
 
     public Class<? extends Creature> getCreatureClass() {

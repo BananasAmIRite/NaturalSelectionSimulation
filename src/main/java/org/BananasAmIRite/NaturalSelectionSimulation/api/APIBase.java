@@ -6,17 +6,12 @@ public interface APIBase {
     /**
      * Runs for 1 generation; triggers {@link org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationStartEvent}
      */
-    void run();
+    void runGeneration(int creatures, int foods);
 
     /**
      * Runs for specified amount of generations; triggers {@link org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationStartEvent} each generation start and {@link org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationEndEvent} each generation end
      */
-    void run(int generations);
-
-    /**
-     * Runs for specified amount of generations with timeout; triggers {@link org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationStartEvent} each generation start and {@link org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationEndEvent} each generation end
-     */
-    void run(int generations, int timeout);
+    void runGeneration(int creatures, int foods, int generations);
 
     /**
      * gets the simulation

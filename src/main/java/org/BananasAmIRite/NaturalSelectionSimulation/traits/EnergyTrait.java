@@ -9,7 +9,7 @@ public class EnergyTrait extends Trait {
 
     @Override
     public double creatureReproduce(double value) {
-        return 0;
+        return value;
     }
 
     @Override

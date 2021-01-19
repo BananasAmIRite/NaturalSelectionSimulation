@@ -12,7 +12,6 @@ import java.util.List;
 public class CreaturesManager {
     private final HashMap<Integer, Creature> creatures = new HashMap<>();
     private final Simulation sim;
-    private int latestID = 0;
 
     public CreaturesManager(Simulation sim) {
         this.sim = sim;
@@ -36,14 +35,6 @@ public class CreaturesManager {
         creatures.remove(creature.getEntityID());
         creature.removeFromMap();
         sim.getEventManager().fireEvent(new EntityRemoveEvent(sim.getMap().getMap(), creature));
-    }
-
-    public void incrementLatestID() {
-        latestID = latestID + 1;
-    }
-
-    public int getLatestID() {
-        return latestID;
     }
 
     public void returnAllHome() {
