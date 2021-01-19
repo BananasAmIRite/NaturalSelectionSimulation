@@ -3,9 +3,7 @@ package org.BananasAmIRite.NaturalSelectionSimulation.apitest.display;
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.Listener;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.annotations.EventHandler;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.EntityMoveEvent;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.EntityRemoveEvent;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.SimulationUpdateEvent;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.*;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.GenericArrayList;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Pair;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Tile;
@@ -25,6 +23,7 @@ public class DisplayListener implements Listener {
     private Simulation sim;
     private SimulationController simulationController;
     private ConsoleWindow consoleWindow;
+    private GenerationController generationController;
 
     public DisplayListener(int x, int y, Simulation sim) {
 
@@ -36,6 +35,7 @@ public class DisplayListener implements Listener {
 
 
         this.simulationController = new SimulationController(sim);
+        this.generationController = new GenerationController(sim);
         // this.consoleWindow = new ConsoleWindow();
     }
 
@@ -103,12 +103,23 @@ public class DisplayListener implements Listener {
 
     }
 
+    @EventHandler
+    public void onGenerationStart(GenerationStartEvent e) {
+        frame.setTitle("Simulation - Currently running generation: " + e.getCurrentGeneration());
+    }
+
+    @EventHandler
+    public void onGenerationEnd(GenerationEndEvent e) {
+        frame.setTitle("Simulation - Finished Generation: " + e.getCurrentGeneration());
+    }
+
 
     private class ControllerKeyListener implements KeyListener {
 
         @Override
         public void keyTyped(KeyEvent e) {
             if (e.getKeyChar() == 'o') simulationController.setVisible(true);
+            if (e.getKeyChar() == 'g') generationController.setVisible(true);
             // if (e.getKeyChar() == 'i') consoleWindow.setVisible(true);
         }
 

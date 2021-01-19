@@ -1,6 +1,8 @@
 package org.BananasAmIRite.NaturalSelectionSimulation.apitest;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
+import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Speed;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 import org.BananasAmIRite.NaturalSelectionSimulation.utils.NumberUtils;
 
@@ -13,16 +15,18 @@ public class TraitsCreature extends Creature {
     public TraitsCreature(Simulation sim) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         super(sim);
 
-        waitTime = (long) NumberUtils.randDouble(1, 2, this.sim.getMap().getMapRandom());
+        waitTime = (long) getTraits().getTrait(Speed.class).getValue();
     }
 
     @Override
     protected long calculateWaitTime() {
-        return waitTime;
+        return (long) NumberUtils.invertNumber(getTraits().getTrait(Speed.class).getLowestValue(), getTraits().getTrait(Speed.class).getHighestValue(), waitTime);
     }
 
     @Override
     public String toString() {
         return super.toString();
     }
+
+
 }

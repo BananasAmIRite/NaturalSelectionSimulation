@@ -21,4 +21,6 @@ public class Main extends NaturalSelection {
     public void run() {
         runGeneration(10, 10, 2);
     }
+
+
 }

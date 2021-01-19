@@ -81,6 +81,6 @@ public abstract class Trait implements TraitBase {
 
     @Override
     public String toString() {
-        return "Trait:" + ID + "{" + defaultValue + '}';
+        return "Trait:" + ID + "{" + getValue() + '}';
     }
 }

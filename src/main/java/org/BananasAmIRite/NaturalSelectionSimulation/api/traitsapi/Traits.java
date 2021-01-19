@@ -43,7 +43,10 @@ public class Traits {
 
         if (t == null) return;
 
-        if (t.isSettable(value)) t.setValue(value);
+        if (t.isSettable(value)) {
+            t.setValue(value);
+            return;
+        }
     }
 
     @Override

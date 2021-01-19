@@ -30,9 +30,9 @@ public class GenerationManager {
         this.lock = new Object();
     }
 
-    public void startGeneration(int creatures, int food, int amount) {
+    public void startGeneration(int creatures, int food, int amount, int delay) {
         if (isInGeneration) return;
-        thread = new Thread(new Generation(creatures, food, amount), "Generation");
+        thread = new Thread(new Generation(creatures, food, amount, delay), "Generation");
         thread.start();
     }
 
@@ -42,80 +42,98 @@ public class GenerationManager {
 
     private class Generation implements Runnable {
 
-        private int creatures;
-        private int food;
-        private int amount;
+        private final int creatures;
+        private final int food;
+        private final int amount;
+        private final int delay;
 
-        public Generation(int c, int f, int amount) {
+        public Generation(int c, int f, int amount, int delay) {
             this.creatures = c;
             this.food = f;
             this.amount = amount;
+            this.delay = delay;
         }
 
         @Override
         public void run() {
-            for (int i = 0; i < amount; i++) {
-                sim.getEventManager().fireEvent(new GenerationStartEvent(sim, generationAmount + 1));
-                isInGeneration = true;
-                if (generationAmount == 0) { // first initialization, add creatures and stuff
-                    Class<? extends Creature> creatureClass = sim.getCreatureClass();
-                    for (int j = 0; j < creatures; j++) {
+            try {
+                for (int i = 0; i < amount; i++) {
+                    sim.setFirstStarted(true);
+                    sim.getEventManager().fireEvent(new GenerationStartEvent(sim, generationAmount + 1));
+                    isInGeneration = true;
+                    if (generationAmount == 0) { // first initialization, add creatures and stuff
+                        Class<? extends Creature> creatureClass = sim.getCreatureClass();
+                        for (int j = 0; j < creatures; j++) {
+                            try {
+                                creatureClass.getDeclaredConstructor(Simulation.class).newInstance(sim);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    generationAmount++;
+
+                    for (int j = 0; j < food; j++) {
+                        new Food(sim);
+                    }
+
+                    for (Creature creature : sim.getCreaturesManager().getCreatures()) {
+                        creature.resetGeneration();
+                    }
+
+                    // run simulation and wait for it to finish
+
+                    System.out.println(sim.getCreaturesManager().getCreatures());
+                    for (Creature creature : sim.getCreaturesManager().getCreatures()) { // start all creatures up
+                        System.out.println(creature);
+                        if (creature.getThread().isAlive()) {
+                            System.out.println("PLAYING");
+                            creature.play();
+                        } else {
+                            System.out.println("STARTING");
+                            creature.getThread().start();
+                        }
+                    }
+
+                    // blocking using wait; waiting for creature to call notify
+                    try {
+                        synchronized (lock) {
+                            lock.wait();
+                        }
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+
+                    System.out.println("FINISHED GENERATION :D");
+
+                    // cleanup (mutations and removing all extra food)
+                    for (Creature creature : sim.getCreaturesManager().getCreatures()) {
                         try {
-                            creatureClass.getDeclaredConstructor(Simulation.class).newInstance(sim);
-                        } catch (Exception e) {
+                            creature.onGenerationFinish();
+                        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
                             e.printStackTrace();
                         }
                     }
-                }
 
-                generationAmount++;
-
-                for (int j = 0; j < food; j++) {
-                    new Food(sim);
-                }
-
-                for (Creature creature : sim.getCreaturesManager().getCreatures()) {
-                    creature.resetGeneration();
-                }
-
-                // run simulation and wait for it to finish
-
-                for (Creature creature : sim.getCreaturesManager().getCreatures()) { // start all creatures up
-                    if (creature.getThread().isAlive())
-                        creature.play();
-                    else
-                        creature.getThread().start();
-                }
-
-                // blocking using wait; waiting for creature to call notify
-                try {
-                    synchronized (lock) {
-                        lock.wait();
+                    for (Food f : new HashSet<>(sim.getFoodManager().getFoods())) { // copy so no cme
+                        // cleanup food
+                        f.remove();
                     }
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
 
-                System.out.println("FINISHED GENERATION :D");
+                    sim.getEventManager().fireEvent(new GenerationEndEvent(sim, generationAmount));
 
-                // cleanup (mutations and removing all extra food)
-                for (Creature creature : sim.getCreaturesManager().getCreatures()) {
+                    finishGeneration();
                     try {
-                        creature.onGenerationFinish();
-                    } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+                        Thread.sleep(this.delay);
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
 
-                for (Food f : sim.getFoodManager().getFoods()) {
-                    f.remove();
-                }
-
-                sim.getEventManager().fireEvent(new GenerationEndEvent(sim, generationAmount + 1));
-
-                finishGeneration();
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-
         }
     }
 

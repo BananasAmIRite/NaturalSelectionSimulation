@@ -10,7 +10,6 @@ public class NumberUtils {
     }
 
     public static float randFloat(float min, float max, Random randGen) {
-
         return randGen.nextFloat() * (max - min) + min;
     }
 
@@ -50,5 +49,16 @@ public class NumberUtils {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Inverts numbers with bounds
+     *
+     * @param b1 lower bounds
+     * @param b2 higher bounds
+     * @param value value to invert
+     * */
+    public static double invertNumber(double b1, double b2, double value) {
+        return b2-value+b1;
     }
 }

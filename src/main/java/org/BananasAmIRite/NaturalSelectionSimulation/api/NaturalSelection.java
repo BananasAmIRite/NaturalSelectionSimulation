@@ -17,7 +17,12 @@ public abstract class NaturalSelection extends Thread implements APIBase {
 
     @Override
     public final void runGeneration(int creatures, int foods, int generations) {
-        simulation.getGenerationManager().startGeneration(creatures, foods, generations);
+        runGeneration(creatures, foods, generations, 2000);
+    }
+
+    @Override
+    public final void runGeneration(int creatures, int foods, int generations, int delay) {
+        simulation.getGenerationManager().startGeneration(creatures, foods, generations, delay);
     }
 
     @Override

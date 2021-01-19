@@ -45,11 +45,6 @@ public class Creature extends Entity implements Runnable {
         thread = new Thread(this, "Creature-" + this.id);
     }
 
-    public Creature(Simulation sim, Traits traits) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        this(sim);
-        this.traits = traits;
-    }
-
     public SimulationCoordinate getHome() {
         return home;
     }
@@ -123,14 +118,14 @@ public class Creature extends Entity implements Runnable {
     }
 
     /**
-     * Calculates the wait time (milliseconds) for one step of a creature
+     * Calculates the wait time (seconds) for one step of a creature
      */
     protected long calculateWaitTime() {
         return 1;
     }
 
     /**
-     * method containing all the tasks the creature will do (such as movement, increasing hunger)
+     * method containing all the tasks thce creature will do (such as movement, increasing hunger)
      *
      * */
     protected void doTasks() {
@@ -251,13 +246,13 @@ public class Creature extends Entity implements Runnable {
     }
 
     /**
-     * reset creature values in prereparation for next generation
+     * reset creature values in preparation for next generation
      *
      * */
     public final void resetGeneration() {
         moveToLocation(getHome()); // go home in case theyre not home
         setHome(false);
-        this.foodCount = 0; //
+        this.foodCount = 0;
         getTraits().setTrait(EnergyTrait.class, getTraits().getTrait(EnergyTrait.class).getDefaultValue()); // set to default value
     }
 
@@ -273,11 +268,18 @@ public class Creature extends Entity implements Runnable {
             // copies traits to new creature and mutates them
             Traits t = new Traits(this.traits);
             for (Trait trait : t.getTraits()) {
-                t.setTrait(trait.getClass(), trait.creatureReproduce(trait.getValue()));
+                double v = trait.creatureReproduce(trait.getValue());
+
+                t.setTrait(trait.getClass(), v);
+
             }
-            System.out.println("Created new creature with traits, " + t.toString());
-            new Creature(sim,t);
+            System.out.println("Created new creature with traits: " + t);
+            sim.getCreatureClass().getDeclaredConstructor(Simulation.class).newInstance(sim).setTraits(t);
         }
+    }
+
+    public void setTraits(Traits traits) {
+        this.traits = traits;
     }
 
     private boolean isAllFinished() {
