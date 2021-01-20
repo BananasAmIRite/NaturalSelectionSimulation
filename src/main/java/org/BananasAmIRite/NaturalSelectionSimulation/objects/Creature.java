@@ -94,7 +94,7 @@ public class Creature extends Entity implements Runnable {
                     }
                     waitQueue = false;
                 }
-
+                System.out.println(calculateWaitTime() * 1000);
                 // tasks
                 Thread.sleep(calculateWaitTime() * 1000);
 

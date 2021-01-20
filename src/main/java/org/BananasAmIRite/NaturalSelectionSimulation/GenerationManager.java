@@ -108,7 +108,7 @@ public class GenerationManager {
                     System.out.println("FINISHED GENERATION :D");
 
                     // cleanup (mutations and removing all extra food)
-                    for (Creature creature : sim.getCreaturesManager().getCreatures()) {
+                    for (Creature creature : new HashSet<>(sim.getCreaturesManager().getCreatures())) {
                         try {
                             creature.onGenerationFinish();
                         } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {

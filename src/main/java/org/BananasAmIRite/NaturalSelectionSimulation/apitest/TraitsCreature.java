@@ -10,17 +10,13 @@ import java.lang.reflect.InvocationTargetException;
 
 public class TraitsCreature extends Creature {
 
-    private long waitTime;
-
     public TraitsCreature(Simulation sim) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
         super(sim);
-
-        waitTime = (long) getTraits().getTrait(Speed.class).getValue();
     }
 
     @Override
     protected long calculateWaitTime() {
-        return (long) NumberUtils.invertNumber(getTraits().getTrait(Speed.class).getLowestValue(), getTraits().getTrait(Speed.class).getHighestValue(), waitTime);
+        return (long) NumberUtils.invertNumber(getTraits().getTrait(Speed.class).getLowestValue(), getTraits().getTrait(Speed.class).getHighestValue(), getTraits().getTraitValue(Speed.class));
     }
 
     @Override

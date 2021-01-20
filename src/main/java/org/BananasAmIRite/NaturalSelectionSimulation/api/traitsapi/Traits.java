@@ -45,7 +45,6 @@ public class Traits {
 
         if (t.isSettable(value)) {
             t.setValue(value);
-            return;
         }
     }
 

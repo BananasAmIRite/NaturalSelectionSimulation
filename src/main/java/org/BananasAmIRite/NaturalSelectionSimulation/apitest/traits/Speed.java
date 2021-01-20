@@ -11,7 +11,7 @@ public class Speed extends Trait {
 
     @Override
     public double creatureReproduce(double value) {
-        double nv = TraitUtils.getReproductionValue(-3, 3, value);
+        double nv = TraitUtils.getReproductionValue(-2, 2, value);
         return !isSettable(nv) ? creatureReproduce(value) : nv;
     }
 
