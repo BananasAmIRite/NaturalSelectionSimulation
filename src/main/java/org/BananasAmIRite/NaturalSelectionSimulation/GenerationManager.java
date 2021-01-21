@@ -107,8 +107,6 @@ public class GenerationManager {
                         break;
                     }
 
-                    System.out.println("FINISHED GENERATION :D");
-
                     // cleanup (mutations and removing all extra food)
                     for (Creature creature : List.copyOf(sim.getCreaturesManager().getCreatures())) {
                         try {
