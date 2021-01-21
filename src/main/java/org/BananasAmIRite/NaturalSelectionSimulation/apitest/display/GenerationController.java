@@ -19,6 +19,7 @@ public class GenerationController extends JFrame implements Listener {
     private JTextField cAmt;
     private JTextField fAmt;
     private JTextField aAmt;
+    private JButton reset;
     private JPanel panel;
     private DisplayListener displayListener;
 
@@ -70,6 +71,8 @@ public class GenerationController extends JFrame implements Listener {
 
         JButton resetGen = new JButton("Reset Simulation");
         resetGen.addActionListener(new GenerationReset());
+        resetGen.setVisible(false);
+        this.reset = resetGen;
 
         // c.setLayout(new BoxLayout(c, BoxLayout.Y_AXIS));
         c.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -111,6 +114,7 @@ public class GenerationController extends JFrame implements Listener {
     @EventHandler
     public void onGenerationDeath(GenerationDeathEvent e) {
         generationText.setText("<html><p>Generation Death: " + e.getCurrentGeneration() + "</p></html>");
+        reset.setVisible(true);
     }
 
     @EventHandler
@@ -164,6 +168,7 @@ public class GenerationController extends JFrame implements Listener {
             aAmt.setText("");
             displayListener.getFrame().setTitle("Simulation - Not Started");
             generationText.setText("Simulation not started");
+            reset.setVisible(false);
         }
     }
 }
