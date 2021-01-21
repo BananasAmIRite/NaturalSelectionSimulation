@@ -61,4 +61,13 @@ public class NumberUtils {
     public static double invertNumber(double b1, double b2, double value) {
         return b2-value+b1;
     }
+
+    public static boolean isInt(String s) {
+        try {
+            Integer.parseInt(s); // would throw an error if not integer
+        }catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 }

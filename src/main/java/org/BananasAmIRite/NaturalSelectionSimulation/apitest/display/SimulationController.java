@@ -35,6 +35,7 @@ public class SimulationController extends JFrame {
 
         // play specific button
         JTextField playSpecField = new JTextField("Play Specific Creature");
+        playSpecField.setColumns(20);
         JButton playSpecBtn = new JButton("Play Specific");
         add(playSpecField);
         add(playSpecBtn);
@@ -42,6 +43,7 @@ public class SimulationController extends JFrame {
 
         // pause specific button
         JTextField pauseSpecField = new JTextField("Pause Specific Creature");
+        pauseSpecField.setColumns(20);
         JButton pauseSpecBtn = new JButton("Pause Specific");
         add(pauseSpecField);
         add(pauseSpecBtn);
@@ -49,16 +51,18 @@ public class SimulationController extends JFrame {
 
         // kill creature btn
         JTextField killSpecField = new JTextField("Kill Specific");
+        killSpecField.setColumns(20);
         JButton killSpecBtn = new JButton("Kill Specific");
         add(killSpecField);
         add(killSpecBtn);
         killSpecBtn.addActionListener(new CreatureKillListener(killSpecField));
 
 
-        setSize(400, 200);
+        setSize(300, 300);
         setVisible(false);
         setLayout(new FlowLayout());
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        setResizable(false);
     }
 
     private class ButtonPauseListener implements ActionListener {

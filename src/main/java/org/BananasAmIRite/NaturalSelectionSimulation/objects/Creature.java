@@ -134,6 +134,7 @@ public class Creature extends Entity implements Runnable {
             return;
         }
 
+        if (isDead) return;
         int direction = (getEnergyDistance(CoordinateUtils.pathFind(getLocation(), getHome())) >= traits.getTraitValue(EnergyTrait.class) && foodCount >= 1 /*req of 1 food count :D*/) ? goHome() : findFood();
         if (direction != 0) {
             moveToLocation(getLocation().move(direction, 1));

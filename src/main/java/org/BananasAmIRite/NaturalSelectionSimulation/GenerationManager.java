@@ -1,20 +1,15 @@
 package org.BananasAmIRite.NaturalSelectionSimulation;
 
-import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.GenerationEndEvent;
-import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.GenerationStartEvent;
-import org.BananasAmIRite.NaturalSelectionSimulation.apitest.TraitsCreature;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.*;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Food;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashSet;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
 
 public class GenerationManager {
 
-    private Simulation sim;
+    private final Simulation sim;
 
     // thread to handle generations internally
     private Thread thread;
@@ -57,6 +52,7 @@ public class GenerationManager {
 
         @Override
         public void run() {
+            sim.getEventManager().fireEvent(new GenerationSetStartEvent(sim, generationAmount + 1, amount, food, creatures));
             try {
                 for (int i = 0; i < amount; i++) {
                     sim.setFirstStarted(true);
@@ -102,6 +98,15 @@ public class GenerationManager {
                         e.printStackTrace();
                     }
 
+                    if (sim.getCreaturesManager().getCreatures().isEmpty()) {
+                        for (Food f : List.copyOf(sim.getFoodManager().getFoods())) {
+                            // cleanup food
+                            f.remove();
+                        }
+                        sim.getEventManager().fireEvent(new GenerationDeathEvent(sim, generationAmount + 1));
+                        break;
+                    }
+
                     System.out.println("FINISHED GENERATION :D");
 
                     // cleanup (mutations and removing all extra food)
@@ -131,6 +136,7 @@ public class GenerationManager {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            sim.getEventManager().fireEvent(new GenerationSetFinishEvent(sim, generationAmount, amount, food, creatures));
         }
     }
 
@@ -146,5 +152,9 @@ public class GenerationManager {
         synchronized (lock) {
             lock.notify();
         }
+    }
+
+    public void resetGen() {
+        generationAmount = 0;
     }
 }

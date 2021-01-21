@@ -35,7 +35,7 @@ public class DisplayListener implements Listener {
 
 
         this.simulationController = new SimulationController(sim);
-        this.generationController = new GenerationController(sim);
+        this.generationController = new GenerationController(sim, this);
         // this.consoleWindow = new ConsoleWindow();
     }
 
@@ -43,7 +43,7 @@ public class DisplayListener implements Listener {
         frame = new JFrame();
         frame.setLayout(new GridLayout(x, y));
 
-        frame.setTitle("Simulation");
+        frame.setTitle("Simulation - Not Started");
 
         // initiate simulation component mapping
         simulationComponentMapping = new GenericArrayList<>(y);
@@ -113,6 +113,11 @@ public class DisplayListener implements Listener {
         frame.setTitle("Simulation - Finished Generation: " + e.getCurrentGeneration());
     }
 
+    @EventHandler
+    public void onGenerationDeath(GenerationDeathEvent e) {
+        frame.setTitle("Simulation - Generation Death: " + e.getCurrentGeneration());
+    }
+
 
     private class ControllerKeyListener implements KeyListener {
 
@@ -136,5 +141,9 @@ public class DisplayListener implements Listener {
 
     public SimulationController getSimulationController() {
         return simulationController;
+    }
+
+    public JFrame getFrame() {
+        return frame;
     }
 }
