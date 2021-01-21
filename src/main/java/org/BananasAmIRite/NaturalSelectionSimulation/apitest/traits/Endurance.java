@@ -17,8 +17,7 @@ public class Endurance extends Trait {
 
     @Override
     protected void setValues() {
-        // TODO: finish implementation of endurance
         setLowestValue(0);
-        setDefaultValue(5);
+        setDefaultValue(10);
     }
 }

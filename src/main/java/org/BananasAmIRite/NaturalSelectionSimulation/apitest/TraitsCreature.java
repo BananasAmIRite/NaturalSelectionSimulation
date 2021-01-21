@@ -2,6 +2,7 @@ package org.BananasAmIRite.NaturalSelectionSimulation.apitest;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
+import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Endurance;
 import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Sense;
 import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Speed;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
@@ -27,7 +28,7 @@ public class TraitsCreature extends Creature {
 
     @Override
     protected int getEnergyPerStep() {
-        return super.getEnergyPerStep() + (int) (getTraits().getTraitValue(Speed.class) / 1000);
+        return Math.max(1, (super.getEnergyPerStep() + (int) (getTraits().getTraitValue(Speed.class) / 1000)) - (int) getTraits().getTraitValue(Endurance.class).doubleValue()); // minimum energy used is 1 energy
     }
 
     @Override
