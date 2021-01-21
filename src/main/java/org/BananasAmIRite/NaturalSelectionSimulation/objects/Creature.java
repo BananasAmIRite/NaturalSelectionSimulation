@@ -42,6 +42,7 @@ public class Creature extends Entity implements Runnable {
         this.sim.getCreaturesManager().registerCreature(this);
 
         thread = new Thread(this, "Creature-" + this.id);
+        System.out.println(getEnergyPerStep());
     }
 
     public SimulationCoordinate getHome() {

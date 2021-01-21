@@ -18,6 +18,6 @@ public class Sense extends Trait {
     @Override
     protected void setValues() {
         setLowestValue(0);
-        setDefaultValue(5);
+        setDefaultValue(3);
     }
 }

@@ -27,7 +27,7 @@ public class Main extends NaturalSelection {
 
     @Override
     public void run() {
-        // sim.setSimulationSpeed(0.5); // lower = faster
+        // sim.setSimulationSpeed(0.1); // lower = faster
     }
 
 

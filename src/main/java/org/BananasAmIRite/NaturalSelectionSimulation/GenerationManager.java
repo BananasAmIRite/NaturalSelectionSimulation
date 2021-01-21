@@ -104,6 +104,7 @@ public class GenerationManager {
                             f.remove();
                         }
                         sim.getEventManager().fireEvent(new GenerationDeathEvent(sim, generationAmount + 1));
+                        isInGeneration = false;
                         break;
                     }
 
@@ -154,5 +155,6 @@ public class GenerationManager {
 
     public void resetGen() {
         generationAmount = 0;
+        isInGeneration = false;
     }
 }
