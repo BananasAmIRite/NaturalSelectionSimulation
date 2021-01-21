@@ -4,6 +4,9 @@ import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.EntityRemoveEvent;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Trait;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
+import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Endurance;
+import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Sense;
+import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Speed;
 import org.BananasAmIRite.NaturalSelectionSimulation.traits.EnergyTrait;
 import org.BananasAmIRite.NaturalSelectionSimulation.utils.CoordinateUtils;
 
@@ -42,7 +45,6 @@ public class Creature extends Entity implements Runnable {
         this.sim.getCreaturesManager().registerCreature(this);
 
         thread = new Thread(this, "Creature-" + this.id);
-        System.out.println(getEnergyPerStep());
     }
 
     public SimulationCoordinate getHome() {

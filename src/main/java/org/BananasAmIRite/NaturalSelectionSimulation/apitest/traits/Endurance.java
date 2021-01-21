@@ -18,6 +18,6 @@ public class Endurance extends Trait {
     @Override
     protected void setValues() {
         setLowestValue(0);
-        setDefaultValue(10);
+        setDefaultValue(3);
     }
 }
