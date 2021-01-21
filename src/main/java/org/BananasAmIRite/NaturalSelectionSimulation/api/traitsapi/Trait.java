@@ -2,6 +2,8 @@ package org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 
+import java.lang.reflect.InvocationTargetException;
+
 public abstract class Trait implements TraitBase {
     protected double lowestValue = 0;
     protected double highestValue = 0;
@@ -82,5 +84,9 @@ public abstract class Trait implements TraitBase {
     @Override
     public String toString() {
         return "Trait:" + ID + "{" + getValue() + '}';
+    }
+
+    public Trait copy() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        return getClass().getDeclaredConstructor().newInstance();
     }
 }

@@ -2,6 +2,7 @@ package org.BananasAmIRite.NaturalSelectionSimulation.apitest;
 
 import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Traits;
+import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Sense;
 import org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits.Speed;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 import org.BananasAmIRite.NaturalSelectionSimulation.utils.NumberUtils;
@@ -24,5 +25,13 @@ public class TraitsCreature extends Creature {
         return super.toString();
     }
 
+    @Override
+    protected int getEnergyPerStep() {
+        return super.getEnergyPerStep() + (int) (getTraits().getTraitValue(Speed.class) / 1000);
+    }
 
+    @Override
+    public int getSensingRange() {
+        return (int) getTraits().getTraitValue(Sense.class).doubleValue();
+    }
 }

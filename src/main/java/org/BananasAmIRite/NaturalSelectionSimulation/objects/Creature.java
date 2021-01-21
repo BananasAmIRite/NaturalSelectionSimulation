@@ -14,7 +14,6 @@ public class Creature extends Entity implements Runnable {
     private final int id;
     private SimulationCoordinate home;
     private Traits traits;
-    private final int SENSING_RANGE = 1;
     private int foodCount = 0;
 
     // multithreading stuff
@@ -94,9 +93,9 @@ public class Creature extends Entity implements Runnable {
                     }
                     waitQueue = false;
                 }
-                System.out.println(calculateWaitTime() * 1000);
+
                 // tasks
-                Thread.sleep(calculateWaitTime() * 1000);
+                Thread.sleep((long) (calculateWaitTime() * sim.getSimulationSpeed()));
 
                 doTasks();
 
@@ -118,10 +117,10 @@ public class Creature extends Entity implements Runnable {
     }
 
     /**
-     * Calculates the wait time (seconds) for one step of a creature
+     * Calculates the wait time (milliseconds) for one step of a creature
      */
     protected long calculateWaitTime() {
-        return 1;
+        return 1000;
     }
 
     /**
@@ -138,7 +137,7 @@ public class Creature extends Entity implements Runnable {
         int direction = (getEnergyDistance(CoordinateUtils.pathFind(getLocation(), getHome())) >= traits.getTraitValue(EnergyTrait.class) && foodCount >= 1 /*req of 1 food count :D*/) ? goHome() : findFood();
         if (direction != 0) {
             moveToLocation(getLocation().move(direction, 1));
-            traits.setTrait(EnergyTrait.class, traits.getTraitValue(EnergyTrait.class) - getEnergyPerStep());
+            traits.setTrait(EnergyTrait.class, Math.max(0, traits.getTraitValue(EnergyTrait.class) - getEnergyPerStep()));
         } else {
             // pause creature and do stuff
             setHome(true);
@@ -168,8 +167,8 @@ public class Creature extends Entity implements Runnable {
 
     protected int findFood() {
 
-        SimulationCoordinate co1 = getLocation().add(-(this.SENSING_RANGE), -(this.SENSING_RANGE));
-        SimulationCoordinate co2 = getLocation().add((this.SENSING_RANGE), (this.SENSING_RANGE));
+        SimulationCoordinate co1 = getLocation().add(-(getSensingRange()), -(getSensingRange()));
+        SimulationCoordinate co2 = getLocation().add((getSensingRange()), (getSensingRange()));
 
         List<Tile> t = Tile.getAllTilesBetween(co1, co2);
 
@@ -273,8 +272,10 @@ public class Creature extends Entity implements Runnable {
                 t.setTrait(trait.getClass(), v);
 
             }
-            System.out.println("Created new creature with traits: " + t);
-            sim.getCreatureClass().getDeclaredConstructor(Simulation.class).newInstance(sim).setTraits(t);
+            Creature c = sim.getCreatureClass().getDeclaredConstructor(Simulation.class).newInstance(sim);
+
+            c.setTraits(t);
+
         }
     }
 
@@ -291,5 +292,9 @@ public class Creature extends Entity implements Runnable {
             }
         }
         return isAllFinished;
+    }
+
+    public int getSensingRange() {
+        return 1;
     }
 }

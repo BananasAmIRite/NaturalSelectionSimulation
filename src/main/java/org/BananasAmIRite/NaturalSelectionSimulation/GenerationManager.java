@@ -8,6 +8,7 @@ import org.BananasAmIRite.NaturalSelectionSimulation.objects.Food;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -84,14 +85,10 @@ public class GenerationManager {
 
                     // run simulation and wait for it to finish
 
-                    System.out.println(sim.getCreaturesManager().getCreatures());
                     for (Creature creature : sim.getCreaturesManager().getCreatures()) { // start all creatures up
-                        System.out.println(creature);
                         if (creature.getThread().isAlive()) {
-                            System.out.println("PLAYING");
                             creature.play();
                         } else {
-                            System.out.println("STARTING");
                             creature.getThread().start();
                         }
                     }
@@ -108,7 +105,7 @@ public class GenerationManager {
                     System.out.println("FINISHED GENERATION :D");
 
                     // cleanup (mutations and removing all extra food)
-                    for (Creature creature : new HashSet<>(sim.getCreaturesManager().getCreatures())) {
+                    for (Creature creature : List.copyOf(sim.getCreaturesManager().getCreatures())) {
                         try {
                             creature.onGenerationFinish();
                         } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
@@ -116,7 +113,7 @@ public class GenerationManager {
                         }
                     }
 
-                    for (Food f : new HashSet<>(sim.getFoodManager().getFoods())) { // copy so no cme
+                    for (Food f : List.copyOf(sim.getFoodManager().getFoods())) { // copy so no cme
                         // cleanup food
                         f.remove();
                     }

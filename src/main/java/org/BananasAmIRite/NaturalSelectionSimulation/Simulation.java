@@ -20,6 +20,7 @@ public class Simulation {
     private Class<? extends Creature> creatureClass = Creature.class;
     private final int sizeX;
     private final int sizeY;
+    private double simulationSpeed = 1;
 
     public Simulation(int x, int y)  {
         eventManager = new EventManager();
@@ -101,5 +102,13 @@ public class Simulation {
 
     public int getSizeY() {
         return sizeY;
+    }
+
+    public void setSimulationSpeed(double s) {
+        this.simulationSpeed = s;
+    }
+
+    public double getSimulationSpeed() {
+        return simulationSpeed;
     }
 }

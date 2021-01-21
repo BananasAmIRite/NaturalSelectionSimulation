@@ -3,22 +3,21 @@ package org.BananasAmIRite.NaturalSelectionSimulation.apitest.traits;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Trait;
 import org.BananasAmIRite.NaturalSelectionSimulation.apitest.utils.TraitUtils;
 
-public class Speed extends Trait {
+public class Sense extends Trait {
 
-    public Speed() {
+    public Sense() {
 
     }
 
     @Override
     public double creatureReproduce(double value) {
-        double nv = TraitUtils.getReproductionValue(-1000, 1000, value); // up to 1 second variation
+        double nv = TraitUtils.getReproductionValue(-2, 2, value); // up to 2 units variation
         return !isSettable(nv) ? creatureReproduce(value) : nv;
     }
 
     @Override
     protected void setValues() {
-        setHighestValue(10000);
-        setLowestValue(1000);
-        setDefaultValue(5000);
+        setLowestValue(0);
+        setDefaultValue(5);
     }
 }

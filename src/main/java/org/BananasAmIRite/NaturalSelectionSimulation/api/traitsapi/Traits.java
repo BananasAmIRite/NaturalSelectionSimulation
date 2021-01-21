@@ -2,7 +2,9 @@ package org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Traits {
     private final List<Trait> data;
@@ -12,7 +14,14 @@ public class Traits {
     }
 
     public Traits(Traits traits) {
-        data = new ArrayList<>(traits.getTraits());
+        data = traits.getTraits().stream().map(s -> {
+            try {
+                return s.copy();
+            } catch (Exception e) {
+                // ignored
+            }
+            return s;
+        }).collect(Collectors.toList());
     }
 
     public void addTrait(Class<? extends Trait> clazz) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
