@@ -5,12 +5,11 @@ import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.Enti
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.SimulationCoordinate;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CreaturesManager {
-    private final HashMap<Integer, Creature> creatures = new HashMap<>();
+    private final Map<Integer, Creature> creatures = new ConcurrentHashMap<>();
     private final Simulation sim;
 
     public CreaturesManager(Simulation sim) {

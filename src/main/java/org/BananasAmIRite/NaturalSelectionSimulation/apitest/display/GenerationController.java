@@ -94,7 +94,7 @@ public class GenerationController extends JFrame implements Listener {
         add(panel);
 
         setSize(300, 300);
-        setVisible(false);
+        setVisible(true);
         getContentPane().setLayout(new FlowLayout());
         setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         // setResizable(false);
@@ -140,6 +140,7 @@ public class GenerationController extends JFrame implements Listener {
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            if (sim.getGenerationManager().isInGenerations()) return;
             boolean isIntC = NumberUtils.isInt(creatures.getText());
             boolean isIntF = NumberUtils.isInt(foods.getText());
             boolean isIntA = NumberUtils.isInt(amount.getText());

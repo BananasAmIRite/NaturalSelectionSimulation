@@ -15,6 +15,7 @@ public class GenerationManager {
     private Thread thread;
 
     private boolean isInGeneration;
+    private boolean isInGenerations;
 
     private int generationAmount;
 
@@ -27,13 +28,21 @@ public class GenerationManager {
     }
 
     public void startGeneration(int creatures, int food, int amount, int delay) {
-        if (isInGeneration) return;
+        if (isInGenerations) return;
         thread = new Thread(new Generation(creatures, food, amount, delay), "Generation");
         thread.start();
     }
 
     private void finishGeneration() {
         isInGeneration = false;
+    }
+
+    public boolean isInGeneration() {
+        return isInGeneration;
+    }
+
+    public boolean isInGenerations() {
+        return isInGenerations;
     }
 
     private class Generation implements Runnable {
@@ -52,6 +61,7 @@ public class GenerationManager {
 
         @Override
         public void run() {
+            isInGenerations = true;
             sim.getEventManager().fireEvent(new GenerationSetStartEvent(sim, generationAmount + 1, amount, food, creatures));
             try {
                 for (int i = 0; i < amount; i++) {
@@ -105,6 +115,7 @@ public class GenerationManager {
                         }
                         sim.getEventManager().fireEvent(new GenerationDeathEvent(sim, generationAmount + 1));
                         isInGeneration = false;
+                        isInGenerations = false;
                         break;
                     }
 
@@ -136,6 +147,7 @@ public class GenerationManager {
                 e.printStackTrace();
             }
             sim.getEventManager().fireEvent(new GenerationSetFinishEvent(sim, generationAmount, amount, food, creatures));
+            isInGenerations = false;
         }
     }
 

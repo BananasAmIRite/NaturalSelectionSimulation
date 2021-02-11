@@ -36,7 +36,9 @@ public abstract class Entity {
      *
      * */
     public final SimulationCoordinate getLocation() {
-        return location;
+        synchronized (this) {
+            return location; // retain thread safety
+        }
     }
 
     /**
@@ -45,10 +47,12 @@ public abstract class Entity {
      *
      * */
     public final boolean setLocation(SimulationCoordinate location) {
-        if (!sim.getMap().changeEntityLocation(this, this.location, location)) return false;
-        this.location = location;
+        synchronized (this) {
+            if (!sim.getMap().changeEntityLocation(this, this.location, location)) return false;
+            this.location = location;
 
-        return true;
+            return true;
+        }
     }
 
     /**

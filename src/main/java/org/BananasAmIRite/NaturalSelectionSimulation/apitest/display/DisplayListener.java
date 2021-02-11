@@ -4,15 +4,20 @@ import org.BananasAmIRite.NaturalSelectionSimulation.Simulation;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.Listener;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.annotations.EventHandler;
 import org.BananasAmIRite.NaturalSelectionSimulation.api.listenerapi.events.*;
+import org.BananasAmIRite.NaturalSelectionSimulation.api.traitsapi.Trait;
+import org.BananasAmIRite.NaturalSelectionSimulation.objects.Creature;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.GenericArrayList;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Pair;
 import org.BananasAmIRite.NaturalSelectionSimulation.objects.Tile;
+import org.BananasAmIRite.NaturalSelectionSimulation.traits.EnergyTrait;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class DisplayListener implements Listener {
 
@@ -111,6 +116,27 @@ public class DisplayListener implements Listener {
     @EventHandler
     public void onGenerationEnd(GenerationEndEvent e) {
         frame.setTitle("Simulation - Finished Generation: " + e.getCurrentGeneration());
+        // generate averages for each trait
+        Map<Class<? extends Trait>, Pair<Integer, Double>> averages = genAvgs();
+
+        System.out.println("Trait Averages for Generation, " + e.getCurrentGeneration() + ": ");
+        for (Map.Entry<Class<? extends Trait>, Pair<Integer, Double>> entry : averages.entrySet()) {
+            System.out.println(entry.getKey().getSimpleName() + ": " + (entry.getValue().getValue() / entry.getValue().getKey()));
+        }
+    }
+
+    private Map<Class<? extends Trait>, Pair<Integer, Double>> genAvgs() {
+        Map<Class<? extends Trait>, Pair<Integer, Double>> traitAverages = new HashMap<>();
+        for (Creature creature : sim.getCreaturesManager().getCreatures()) {
+            for (Trait trait : creature.getTraits().getTraits()) {
+                traitAverages.put(trait.getClass(),
+                        traitAverages.get(trait.getClass()) == null ? new Pair<>(1, trait.getDisplayedValue()) :
+                                new Pair<>(traitAverages.get(trait.getClass()).getKey() + 1, traitAverages.get(trait.getClass()).getValue() + trait.getDisplayedValue())
+                        );
+            }
+        }
+        traitAverages.remove(EnergyTrait.class); // remove the native EnergyTrait cuz it represent energy
+        return traitAverages;
     }
 
     @EventHandler

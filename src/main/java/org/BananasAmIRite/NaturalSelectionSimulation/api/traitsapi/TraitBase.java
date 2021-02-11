@@ -42,7 +42,7 @@ public interface TraitBase {
 
     /**
      * this and {@link #setHighestValue(double)} define the boundaries of the values of the traits
-     * Value must be set at method, {@link #setValues()} or it will not apply
+     * Value must be set at method, {@link Trait#setValues()} or it will not apply
      */
     void setLowestValue(double lowest);
 
@@ -55,7 +55,7 @@ public interface TraitBase {
     /**
      * this and {@link #setLowestValue(double)} define the boundaries of the values of the traits
      * If the value given is 0, there will not be any highest value bound
-     * Value must be set at method, {@link #setValues()} or it will not apply
+     * Value must be set at method, {@link Trait#setValues()} or it will not apply
      */
     void setHighestValue(double highest);
 
@@ -70,4 +70,11 @@ public interface TraitBase {
      * Value must be set at method, {@link Trait#setValues()} or it will not apply
      */
     void setDefaultValue(int value);
+
+
+    /**
+     * For use in case the underlying value needs to be skewed before displaying
+     *
+     * */
+    double getDisplayedValue();
 }

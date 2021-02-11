@@ -86,6 +86,7 @@ public class Simulation {
         return generationManager;
     }
 
+
     public Class<? extends Creature> getCreatureClass() {
         return creatureClass;
     }

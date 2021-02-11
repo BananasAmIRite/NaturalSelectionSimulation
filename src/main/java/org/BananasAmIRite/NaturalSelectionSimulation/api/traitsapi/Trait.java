@@ -89,4 +89,9 @@ public abstract class Trait implements TraitBase {
     public Trait copy() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
         return getClass().getDeclaredConstructor().newInstance();
     }
+
+    @Override
+    public double getDisplayedValue() {
+        return getValue();
+    }
 }

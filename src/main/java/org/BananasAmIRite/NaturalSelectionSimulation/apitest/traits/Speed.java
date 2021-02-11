@@ -21,4 +21,9 @@ public class Speed extends Trait {
         setLowestValue(1000);
         setDefaultValue(5000);
     }
+
+    @Override
+    public double getDisplayedValue() {
+        return getValue() / 1000;
+    }
 }
