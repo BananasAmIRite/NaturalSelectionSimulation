@@ -116,7 +116,13 @@ public class DisplayListener implements Listener {
     @EventHandler
     public void onGenerationEnd(GenerationEndEvent e) {
         frame.setTitle("Simulation - Finished Generation: " + e.getCurrentGeneration());
-        // generate averages for each trait
+
+
+    }
+
+    @EventHandler
+    public void onGenerationEndBeforeCleanup(GenerationEndBeforeCleanupEvent e) {
+        // generate averages for each trait; not put in GenerationEndEvent because mutations will skew the data
         Map<Class<? extends Trait>, Pair<Integer, Double>> averages = genAvgs();
 
         System.out.println("Trait Averages for Generation, " + e.getCurrentGeneration() + ": ");

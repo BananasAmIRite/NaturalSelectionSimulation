@@ -109,9 +109,11 @@ public class GenerationManager {
                     }
 
                     if (sim.getCreaturesManager().getCreatures().isEmpty()) {
-                        for (Food f : List.copyOf(sim.getFoodManager().getFoods())) {
-                            // cleanup food
-                            f.remove();
+                        if (sim.getFoodManager().getFoods().size() > 0) { // List.copyOf doesnt like empty arrays
+                            for (Food f : List.copyOf(sim.getFoodManager().getFoods())) {
+                                // cleanup food
+                                f.remove();
+                            }
                         }
                         sim.getEventManager().fireEvent(new GenerationDeathEvent(sim, generationAmount + 1));
                         isInGeneration = false;
@@ -119,18 +121,24 @@ public class GenerationManager {
                         break;
                     }
 
+                    sim.getEventManager().fireEvent(new GenerationEndBeforeCleanupEvent(sim, generationAmount));
+
                     // cleanup (mutations and removing all extra food)
-                    for (Creature creature : List.copyOf(sim.getCreaturesManager().getCreatures())) {
-                        try {
-                            creature.onGenerationFinish();
-                        } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
-                            e.printStackTrace();
+                    if (sim.getCreaturesManager().getCreatures().size() > 0) {
+                        for (Creature creature : List.copyOf(sim.getCreaturesManager().getCreatures())) {
+                            try {
+                                creature.onGenerationFinish();
+                            } catch (InvocationTargetException | NoSuchMethodException | InstantiationException | IllegalAccessException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
-
-                    for (Food f : List.copyOf(sim.getFoodManager().getFoods())) { // copy so no cme
-                        // cleanup food
-                        f.remove();
+                    
+                    if (sim.getFoodManager().getFoods().size() > 0) {
+                        for (Food f : List.copyOf(sim.getFoodManager().getFoods())) { // copy so no cme
+                            // cleanup food
+                            f.remove();
+                        }
                     }
 
                     sim.getEventManager().fireEvent(new GenerationEndEvent(sim, generationAmount));
